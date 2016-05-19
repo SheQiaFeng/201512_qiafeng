@@ -100,7 +100,7 @@ public class ContactlistFragment extends Fragment {
                                 refresh();
 		                    }else{
 		                        String s1 = getResources().getString(cn.ucai.superwechat.R.string.get_failed_please_check);
-		                        Toast.makeText(getActivity(), s1, 1).show();
+		                        Toast.makeText(getActivity(), s1, Toast.LENGTH_SHORT).show();
 		                        progressBar.setVisibility(View.GONE);
 		                    }
 		                }
@@ -318,9 +318,8 @@ public class ContactlistFragment extends Fragment {
 
 	/**
 	 * 删除联系人
-	 * 
-	 * @param toDeleteUser
-	 */
+	 * @param tobeDeleteUser
+     */
 	public void deleteContact(final User tobeDeleteUser) {
 		String st1 = getResources().getString(cn.ucai.superwechat.R.string.deleting);
 		final String st2 = getResources().getString(cn.ucai.superwechat.R.string.Delete_failed);
@@ -348,7 +347,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2 + e.getMessage(), 1).show();
+							Toast.makeText(getActivity(), st2 + e.getMessage(),Toast.LENGTH_SHORT).show();
 						}
 					});
 
@@ -378,7 +377,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2, 0).show();
+							Toast.makeText(getActivity(), st2,Toast.LENGTH_SHORT).show();
 							refresh();
 						}
 					});
@@ -387,7 +386,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st3, 0).show();
+							Toast.makeText(getActivity(), st3, Toast.LENGTH_SHORT).show();
 						}
 					});
 				}

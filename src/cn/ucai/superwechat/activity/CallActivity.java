@@ -46,12 +46,10 @@ public class CallActivity extends BaseActivity {
             EMChatManager.getInstance().removeCallStateChangeListener(callStateListener);
             
     }
-    
+
     /**
      * 播放拨号响铃
-     * 
-     * @param sound
-     * @param number
+     * @return
      */
     protected int playMakeCallSounds() {
         try {
