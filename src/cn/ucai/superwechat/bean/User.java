@@ -17,6 +17,7 @@ public class User extends Location implements java.io.Serializable {
 	private String muserPassword;
 	private String muserNick;
 	private Integer muserUnreadMsgCount;
+	private  String header;
 
 	// Constructors
 
@@ -90,7 +91,7 @@ public class User extends Location implements java.io.Serializable {
 		return "EMUser [MUserId=" + muserId + ", MUserName=" + muserName
 				+ ", MUserPassword=" + muserPassword + ", MUserNick="
 				+ muserNick + ", MUserUnreadMsgCount=" + muserUnreadMsgCount
-				+ "]";
+				+",header="+header+ "]";
 	}
 
 	@Override
