@@ -6,6 +6,22 @@ package cn.ucai.superwechat.bean;
 public class Contact extends User implements java.io.Serializable {
 	private static final long serialVersionUID = -2183229871248294573L;
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Contact)) return false;
+
+		Contact contact = (Contact) o;
+
+		return mcontactId.equals(contact.mcontactId);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return mcontactId.hashCode();
+	}
+
 	/**
 	 * 
 	 */
