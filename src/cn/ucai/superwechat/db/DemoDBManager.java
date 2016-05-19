@@ -12,9 +12,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.domain.EMUser;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
+
 import com.easemob.util.HanziToPinyin;
 
 public class DemoDBManager {
@@ -34,18 +35,18 @@ public class DemoDBManager {
      * 
      * @param contactList
      */
-    synchronized public void saveContactList(List<User> contactList) {
+    synchronized public void saveContactList(List<EMUser> contactList) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (db.isOpen()) {
-            db.delete(UserDao.TABLE_NAME, null, null);
-            for (User user : contactList) {
+            db.delete(EMUserDao.TABLE_NAME, null, null);
+            for (EMUser EMUser : contactList) {
                 ContentValues values = new ContentValues();
-                values.put(UserDao.COLUMN_NAME_ID, user.getUsername());
-                if(user.getNick() != null)
-                    values.put(UserDao.COLUMN_NAME_NICK, user.getNick());
-                if(user.getAvatar() != null)
-                    values.put(UserDao.COLUMN_NAME_AVATAR, user.getAvatar());
-                db.replace(UserDao.TABLE_NAME, null, values);
+                values.put(EMUserDao.COLUMN_NAME_ID, EMUser.getUsername());
+                if(EMUser.getNick() != null)
+                    values.put(EMUserDao.COLUMN_NAME_NICK, EMUser.getNick());
+                if(EMUser.getAvatar() != null)
+                    values.put(EMUserDao.COLUMN_NAME_AVATAR, EMUser.getAvatar());
+                db.replace(EMUserDao.TABLE_NAME, null, values);
             }
         }
     }
@@ -55,40 +56,40 @@ public class DemoDBManager {
      * 
      * @return
      */
-    synchronized public Map<String, User> getContactList() {
+    synchronized public Map<String, EMUser> getContactList() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Map<String, User> users = new HashMap<String, User>();
+        Map<String, EMUser> users = new HashMap<String, EMUser>();
         if (db.isOpen()) {
-            Cursor cursor = db.rawQuery("select * from " + UserDao.TABLE_NAME /* + " desc" */, null);
+            Cursor cursor = db.rawQuery("select * from " + EMUserDao.TABLE_NAME /* + " desc" */, null);
             while (cursor.moveToNext()) {
-                String username = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_ID));
-                String nick = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_NICK));
-                String avatar = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_AVATAR));
-                User user = new User();
-                user.setUsername(username);
-                user.setNick(nick);
-                user.setAvatar(avatar);
+                String username = cursor.getString(cursor.getColumnIndex(EMUserDao.COLUMN_NAME_ID));
+                String nick = cursor.getString(cursor.getColumnIndex(EMUserDao.COLUMN_NAME_NICK));
+                String avatar = cursor.getString(cursor.getColumnIndex(EMUserDao.COLUMN_NAME_AVATAR));
+                EMUser EMUser = new EMUser();
+                EMUser.setUsername(username);
+                EMUser.setNick(nick);
+                EMUser.setAvatar(avatar);
                 String headerName = null;
-                if (!TextUtils.isEmpty(user.getNick())) {
-                    headerName = user.getNick();
+                if (!TextUtils.isEmpty(EMUser.getNick())) {
+                    headerName = EMUser.getNick();
                 } else {
-                    headerName = user.getUsername();
+                    headerName = EMUser.getUsername();
                 }
                 
                 if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
                         || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)) {
-                    user.setHeader("");
+                    EMUser.setHeader("");
                 } else if (Character.isDigit(headerName.charAt(0))) {
-                    user.setHeader("#");
+                    EMUser.setHeader("#");
                 } else {
-                    user.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1))
+                    EMUser.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1))
                             .get(0).target.substring(0, 1).toUpperCase());
-                    char header = user.getHeader().toLowerCase().charAt(0);
+                    char header = EMUser.getHeader().toLowerCase().charAt(0);
                     if (header < 'a' || header > 'z') {
-                        user.setHeader("#");
+                        EMUser.setHeader("#");
                     }
                 }
-                users.put(username, user);
+                users.put(username, EMUser);
             }
             cursor.close();
         }
@@ -102,41 +103,41 @@ public class DemoDBManager {
     synchronized public void deleteContact(String username){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
-            db.delete(UserDao.TABLE_NAME, UserDao.COLUMN_NAME_ID + " = ?", new String[]{username});
+            db.delete(EMUserDao.TABLE_NAME, EMUserDao.COLUMN_NAME_ID + " = ?", new String[]{username});
         }
     }
     
     /**
      * 保存一个联系人
-     * @param user
+     * @param EMUser
      */
-    synchronized public void saveContact(User user){
+    synchronized public void saveContact(EMUser EMUser){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(UserDao.COLUMN_NAME_ID, user.getUsername());
-        if(user.getNick() != null)
-            values.put(UserDao.COLUMN_NAME_NICK, user.getNick());
-        if(user.getAvatar() != null)
-            values.put(UserDao.COLUMN_NAME_AVATAR, user.getAvatar());
+        values.put(EMUserDao.COLUMN_NAME_ID, EMUser.getUsername());
+        if(EMUser.getNick() != null)
+            values.put(EMUserDao.COLUMN_NAME_NICK, EMUser.getNick());
+        if(EMUser.getAvatar() != null)
+            values.put(EMUserDao.COLUMN_NAME_AVATAR, EMUser.getAvatar());
         if(db.isOpen()){
-            db.replace(UserDao.TABLE_NAME, null, values);
+            db.replace(EMUserDao.TABLE_NAME, null, values);
         }
     }
     
     public void setDisabledGroups(List<String> groups){
-        setList(UserDao.COLUMN_NAME_DISABLED_GROUPS, groups);
+        setList(EMUserDao.COLUMN_NAME_DISABLED_GROUPS, groups);
     }
     
     public List<String>  getDisabledGroups(){       
-        return getList(UserDao.COLUMN_NAME_DISABLED_GROUPS);
+        return getList(EMUserDao.COLUMN_NAME_DISABLED_GROUPS);
     }
     
     public void setDisabledIds(List<String> ids){
-        setList(UserDao.COLUMN_NAME_DISABLED_IDS, ids);
+        setList(EMUserDao.COLUMN_NAME_DISABLED_IDS, ids);
     }
     
     public List<String> getDisabledIds(){
-        return getList(UserDao.COLUMN_NAME_DISABLED_IDS);
+        return getList(EMUserDao.COLUMN_NAME_DISABLED_IDS);
     }
     
     synchronized private void setList(String column, List<String> strList){
@@ -151,13 +152,13 @@ public class DemoDBManager {
             ContentValues values = new ContentValues();
             values.put(column, strBuilder.toString());
 
-            db.update(UserDao.PREF_TABLE_NAME, values, null,null);
+            db.update(EMUserDao.PREF_TABLE_NAME, values, null,null);
         }
     }
     
     synchronized private List<String> getList(String column){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select " + column + " from " + UserDao.PREF_TABLE_NAME,null);
+        Cursor cursor = db.rawQuery("select " + column + " from " + EMUserDao.PREF_TABLE_NAME,null);
         if (!cursor.moveToFirst()) {
             cursor.close();
             return null;
@@ -289,15 +290,15 @@ public class DemoDBManager {
 	synchronized public void saveRobotList(List<RobotUser> robotList) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		if (db.isOpen()) {
-			db.delete(UserDao.ROBOT_TABLE_NAME, null, null);
+			db.delete(EMUserDao.ROBOT_TABLE_NAME, null, null);
 			for (RobotUser item : robotList) {
 				ContentValues values = new ContentValues();
-				values.put(UserDao.ROBOT_COLUMN_NAME_ID, item.getUsername());
+				values.put(EMUserDao.ROBOT_COLUMN_NAME_ID, item.getUsername());
 				if (item.getNick() != null)
-					values.put(UserDao.ROBOT_COLUMN_NAME_NICK, item.getNick());
+					values.put(EMUserDao.ROBOT_COLUMN_NAME_NICK, item.getNick());
 				if (item.getAvatar() != null)
-					values.put(UserDao.ROBOT_COLUMN_NAME_AVATAR, item.getAvatar());
-				db.replace(UserDao.ROBOT_TABLE_NAME, null, values);
+					values.put(EMUserDao.ROBOT_COLUMN_NAME_AVATAR, item.getAvatar());
+				db.replace(EMUserDao.ROBOT_TABLE_NAME, null, values);
 			}
 		}
 	}
@@ -309,14 +310,14 @@ public class DemoDBManager {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Map<String, RobotUser> users = null;
 		if (db.isOpen()) {
-			Cursor cursor = db.rawQuery("select * from " + UserDao.ROBOT_TABLE_NAME, null);
+			Cursor cursor = db.rawQuery("select * from " + EMUserDao.ROBOT_TABLE_NAME, null);
 			if(cursor.getCount()>0){
 				users = new HashMap<String, RobotUser>();
 			};
 			while (cursor.moveToNext()) {
-				String username = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_ID));
-				String nick = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_NICK));
-				String avatar = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_AVATAR));
+				String username = cursor.getString(cursor.getColumnIndex(EMUserDao.ROBOT_COLUMN_NAME_ID));
+				String nick = cursor.getString(cursor.getColumnIndex(EMUserDao.ROBOT_COLUMN_NAME_NICK));
+				String avatar = cursor.getString(cursor.getColumnIndex(EMUserDao.ROBOT_COLUMN_NAME_AVATAR));
 				RobotUser user = new RobotUser();
 				user.setUsername(username);
 				user.setNick(nick);

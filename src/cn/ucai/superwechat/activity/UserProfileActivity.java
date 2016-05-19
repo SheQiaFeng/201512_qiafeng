@@ -27,7 +27,7 @@ import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.domain.User;
+import cn.ucai.superwechat.domain.EMUser;
 import cn.ucai.superwechat.utils.UserUtils;
 import com.squareup.picasso.Picasso;
 
@@ -120,18 +120,18 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	public void asyncFetchUserInfo(String username){
-		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<User>() {
+		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<EMUser>() {
 			
 			@Override
-			public void onSuccess(User user) {
-				if (user != null) {
-					tvNickName.setText(user.getNick());
-					if(!TextUtils.isEmpty(user.getAvatar())){
-						 Picasso.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.default_avatar).into(headAvatar);
+			public void onSuccess(EMUser EMUser) {
+				if (EMUser != null) {
+					tvNickName.setText(EMUser.getNick());
+					if(!TextUtils.isEmpty(EMUser.getAvatar())){
+						 Picasso.with(UserProfileActivity.this).load(EMUser.getAvatar()).placeholder(R.drawable.default_avatar).into(headAvatar);
 					}else{
 						Picasso.with(UserProfileActivity.this).load(R.drawable.default_avatar).into(headAvatar);
 					}
-					UserUtils.saveUserInfo(user);
+					UserUtils.saveUserInfo(EMUser);
 				}
 			}
 			

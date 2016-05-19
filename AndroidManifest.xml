@@ -285,7 +285,7 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-        <!-- user profile -->
+        <!-- EMUser profile -->
 		<activity
 		    android:name="cn.ucai.superwechat.activity.UserProfileActivity"
 		    android:screenOrientation="portrait"
