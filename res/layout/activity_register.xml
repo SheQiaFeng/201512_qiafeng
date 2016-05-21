@@ -23,7 +23,6 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_splash_logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dip"
             android:text="超级微信"
@@ -174,7 +173,7 @@
             android:layout_marginRight="10dip"
             android:scaleType="fitXY"
             android:src="@drawable/default_avatar"/>
-            <EditText
+            <ImageView
                 android:id="@+id/photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
