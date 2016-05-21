@@ -25,6 +25,7 @@ import cn.ucai.superwechat.bean.Contact;
 import cn.ucai.superwechat.bean.Group;
 import cn.ucai.superwechat.bean.Member;
 import cn.ucai.superwechat.bean.User;
+import cn.ucai.superwechat.data.RequestManager;
 
 public class SuperWeChatApplication extends Application {
 public static   String SERVER_ROOT="http://127.0.0.1:8080/SuperWeChatServer/Server?";
@@ -64,6 +65,7 @@ public static   String SERVER_ROOT="http://127.0.0.1:8080/SuperWeChatServer/Serv
          * }
          */
         hxSDKHelper.onInit(applicationContext);
+		RequestManager.init(applicationContext);
 	}
 
 	public static SuperWeChatApplication getInstance() {
