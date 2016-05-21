@@ -12,12 +12,12 @@ public class User extends Location implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private Integer muserId;
+	private Integer muserId;  //user id
 	private String muserName;
 	private String muserPassword;
 	private String muserNick;
 	private Integer muserUnreadMsgCount;
-	private  String header;
+	private  String header;  //名字首字母
 
 	// Constructors
 
@@ -84,6 +84,14 @@ public class User extends Location implements java.io.Serializable {
 
 	public void setMUserUnreadMsgCount(Integer MUserUnreadMsgCount) {
 		this.muserUnreadMsgCount = MUserUnreadMsgCount;
+	}
+
+	public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
 	}
 
 	@Override

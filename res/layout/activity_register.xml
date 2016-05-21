@@ -13,10 +13,11 @@
 
 
         <ImageView
+            android:layout_marginLeft="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/chat_location_normal"
+            android:src="@drawable/aaaa"
             android:layout_toLeftOf="@+id/title"/>
         <TextView
             android:id="@+id/title"

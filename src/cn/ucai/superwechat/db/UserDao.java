@@ -58,7 +58,7 @@ public class UserDao extends SQLiteOpenHelper{
         return insert>0;
     }
 
-    public User findUserByName(String username){
-
-    }
+//    public User findUserByName(String username){
+//
+//    }
 }
