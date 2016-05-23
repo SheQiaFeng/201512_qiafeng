@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +50,8 @@ import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.User;
 import cn.ucai.superwechat.data.ApiParams;
+import cn.ucai.superwechat.data.GsonRequest;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.EMUserDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EMUser;
@@ -240,7 +243,7 @@ public class LoginActivity extends BaseActivity {
             // 处理好友和群组
             initializeContacts();
             //下载用户头像到SD卡里面
-
+            //final OkHttpUtils
 
 
 

@@ -103,15 +103,15 @@ public class OkHttpUtils<T> {
     public OkHttpUtils<T> addParam(String key, String value) {
         try {
             if (mUrl.indexOf("?") == -1) {
-                mUrl.append("?").append(key).append("=")
-                        .append(URLEncoder.encode(value, UTF_8));
-            } else {
-                mUrl.append("&").append(key).append("=")
-                        .append(URLEncoder.encode(value, UTF_8));
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            mUrl.append("?").append(key).append("=")
+                    .append(URLEncoder.encode(value, UTF_8));
+        } else {
+            mUrl.append("&").append(key).append("=")
+                    .append(URLEncoder.encode(value, UTF_8));
         }
+    } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+    }
         return this;
     }
 
