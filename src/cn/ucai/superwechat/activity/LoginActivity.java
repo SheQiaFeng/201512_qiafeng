@@ -13,12 +13,6 @@
  */
 package cn.ucai.superwechat.activity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,23 +29,23 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.easemob.EMCallBack;
-
-import cn.ucai.superwechat.I;
-import cn.ucai.superwechat.applib.controller.HXSDKHelper;
-
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
-import com.google.gson.Gson;
-import com.squareup.okhttp.internal.Util;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.ucai.superwechat.Constant;
-import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.DemoHXSDKHelper;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.bean.User;
 import cn.ucai.superwechat.data.ApiParams;
 import cn.ucai.superwechat.data.GsonRequest;
-import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.EMUserDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EMUser;
@@ -186,7 +180,7 @@ public class LoginActivity extends BaseActivity {
 
     private void loginAppServer() {
         UserDao dao = new UserDao(mContext);
-        User user = dao.findUserByName(currentUsername);
+        User user = dao.findUserByUserName(currentUsername);
         if (user != null) {
             if (user.getMUserPassword().equals(MD5.getData(currentPassword))) {
 

@@ -6,10 +6,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
@@ -19,6 +19,7 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.User;
+import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.task.DownloadAllGroupTask;
 import cn.ucai.superwechat.task.DownloadContactListTask;
 import cn.ucai.superwechat.task.DownloadPublicGroupTask;
@@ -29,7 +30,6 @@ import cn.ucai.superwechat.task.DownloadPublicGroupTask;
 public class SplashActivity extends BaseActivity {
     private RelativeLayout rootLayout;
     private TextView versionText;
-    Context mContext;
 
     private static final int sleepTime = 2000;
 
@@ -51,19 +51,22 @@ public class SplashActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         if (DemoHXSDKHelper.getInstance().isLogined()) {
-            User user = SuperWeChatApplication.getInstance().getUser();
-            SuperWeChatApplication instance = SuperWeChatApplication.getInstance();
-            instance.setUser(user);
-            instance.setUserName(user.getMUserName());
-            instance.setPassword(user.getMUserPassword());
-            SuperWeChatApplication.currentUserNick = user.getMUserNick();
-            new DownloadContactListTask(mContext, user.getMUserName()).execute();
-            new DownloadAllGroupTask(mContext, user.getMUserName()).execute();
-            new DownloadPublicGroupTask(mContext, user.getMUserName(),
-                    I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT).execute();
+            String username = SuperWeChatApplication.getInstance().getUserName();
+            UserDao dao = new UserDao(SplashActivity.this);
+
+            User user=dao.findUserByUserName(username);
+            SuperWeChatApplication.getInstance().setUser(user);
+            Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
+
+            //登录成功
+            if(user!=null){
+                SuperWeChatApplication.currentUserNick = user.getMUserNick();
+                new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
+                new DownloadAllGroupTask(SplashActivity.this, user.getMUserName()).execute();
+                new DownloadPublicGroupTask(SplashActivity.this, user.getMUserName(), I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT).execute();
+            }
 
         }
-
         new Thread(new Runnable() {
             public void run() {
                 if (DemoHXSDKHelper.getInstance().isLogined()) {

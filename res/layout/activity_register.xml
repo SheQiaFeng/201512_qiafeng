@@ -105,7 +105,7 @@
             android:background="#fff" >
 
             <ImageView
-                android:id="@+id/iv_avatar"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -166,6 +166,7 @@
             android:layout_marginTop="10dp"
             android:background="#fff">
         <ImageView
+            android:id="@+id/iv_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
