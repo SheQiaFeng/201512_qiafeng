@@ -21,7 +21,7 @@ import cn.ucai.superwechat.utils.Utils;
  * Created by Administrator on 2016/5/23 0023.
  */
 public class DownloadContactListTask extends BaseActivity {
-    private static final String TAG = DownloadContactListTask.class.getName();
+    private static final String TAG = DownloadContactListTask.class.getName();//log.x需要
     Context mContext;
     String username;
     String path;

@@ -194,7 +194,7 @@ public class LoginActivity extends BaseActivity {
         User user = dao.findUserByUserName(currentUsername);
         if (user != null) {
             if (user.getMUserPassword().equals(MD5.getData(currentPassword))) {
-
+                saveUser(user);
                 loginSuccess();
             } else {
                 pd.dismiss();
@@ -203,8 +203,10 @@ public class LoginActivity extends BaseActivity {
             }
         } else {
             try {
-                String path = new ApiParams().with(I.User.USER_NAME, currentUsername)
-                        .with(I.User.PASSWORD, currentPassword).getRequestUrl(I.REQUEST_LOGIN);
+                String path = new ApiParams()
+                        .with(I.User.USER_NAME, currentUsername)
+                        .with(I.User.PASSWORD, currentPassword)
+                        .getRequestUrl(I.REQUEST_LOGIN);
                 executeRequest(new GsonRequest<User>(path, User.class,
                         responseListener(), errorListener()));
             } catch (Exception e) {
@@ -217,9 +219,13 @@ public class LoginActivity extends BaseActivity {
     private Response.Listener<User> responseListener() {
         return new Response.Listener<User>() {
             @Override
+
             public void onResponse(User user) {
                 if (user.isResult()) {
                     saveUser(user);
+                    user.setMUserPassword(MD5.getData(user.getMUserPassword()));//利用MD5进行密码匹配
+                    UserDao dao=new UserDao(mContext);
+                    dao.addUser(user);
                     loginSuccess();
                 } else {
                     pd.dismiss();

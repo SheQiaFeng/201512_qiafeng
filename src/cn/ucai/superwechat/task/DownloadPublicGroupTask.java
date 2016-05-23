@@ -21,7 +21,7 @@ import cn.ucai.superwechat.utils.Utils;
  * Created by Administrator on 2016/5/23 0023.
  */
 public class DownloadPublicGroupTask extends BaseActivity {
-    private  static  final  String TAG= DownloadPublicGroupTask.class.getName();
+    private static final String TAG = DownloadPublicGroupTask.class.getName();
     Context mContext;
     String username;
     String path;
@@ -34,13 +34,14 @@ public class DownloadPublicGroupTask extends BaseActivity {
 
     private void initPath() {
         try {
-            path=new ApiParams()
-                    .with(I.Contact.USER_NAME,username)
+            path = new ApiParams()
+                    .with(I.Contact.USER_NAME, username)
                     .getRequestUrl(I.REQUEST_FIND_PUBLIC_GROUPS);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void execute() {
         executeRequest(new GsonRequest<Contact[]>(path, Contact[].class
                 , responseDownloadPublicGroupTaskListener(), errorListener()));
@@ -55,15 +56,8 @@ public class DownloadPublicGroupTask extends BaseActivity {
                     ArrayList<Contact> list = Utils.array2List(response);
                     contactList.clear();
                     contactList.addAll(list);
-                    HashMap<String, Contact> userList =
-                            SuperWeChatApplication.getInstance().getUserList();
-                    userList.clear();
-                    for (Contact c : list) {
-                        userList.put(c.getMContactCname(), c);
-                    }
+                    mContext.sendBroadcast(new Intent("update_public_group"));
                 }
-                mContext.sendBroadcast(new Intent("update_public_group"));
-
             }
         };
 

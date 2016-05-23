@@ -59,15 +59,8 @@ public class DownloadAllGroupTask extends BaseActivity {
                     ArrayList<Contact> list = Utils.array2List(response);
                     contactList.clear();
                     contactList.addAll(list);
-                    HashMap<String, Contact> userList =
-                            SuperWeChatApplication.getInstance().getUserList();
-                    userList.clear();
-                    for (Contact c : list) {
-                        userList.put(c.getMContactCname(), c);
-                    }
-                }
                 mContext.sendBroadcast(new Intent("update_group_list"));
-
+            }
             }
         };
 
