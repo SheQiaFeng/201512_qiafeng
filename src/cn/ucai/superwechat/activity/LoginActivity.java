@@ -13,12 +13,14 @@
  */
 package cn.ucai.superwechat.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -31,7 +33,14 @@ import com.android.volley.Response;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
 
+import org.jivesoftware.smackx.packet.StreamInitiation;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +55,11 @@ import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.bean.User;
 import cn.ucai.superwechat.data.ApiParams;
 import cn.ucai.superwechat.data.GsonRequest;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.EMUserDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EMUser;
+import cn.ucai.superwechat.listener.OnSetAvatarListener;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.Utils;
@@ -57,7 +68,7 @@ import cn.ucai.superwechat.utils.Utils;
  * 登陆页面
  */
 public class LoginActivity extends BaseActivity {
-    Context mContext;
+    Activity mContext;
     private static final String TAG = "LoginActivity";
     public static final int REQUEST_CODE_SETNICK = 1;
     private EditText usernameEditText;
@@ -185,17 +196,17 @@ public class LoginActivity extends BaseActivity {
             if (user.getMUserPassword().equals(MD5.getData(currentPassword))) {
 
                 loginSuccess();
-            }else {
+            } else {
                 pd.dismiss();
                 Toast.makeText(getApplicationContext(), R.string.login_failure_failed, Toast.LENGTH_SHORT).show();
 
             }
-        }else {
+        } else {
             try {
                 String path = new ApiParams().with(I.User.USER_NAME, currentUsername)
                         .with(I.User.PASSWORD, currentPassword).getRequestUrl(I.REQUEST_LOGIN);
-                executeRequest(new GsonRequest<User>(path,User.class,
-                        responseListener(),errorListener()));
+                executeRequest(new GsonRequest<User>(path, User.class,
+                        responseListener(), errorListener()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -207,12 +218,12 @@ public class LoginActivity extends BaseActivity {
         return new Response.Listener<User>() {
             @Override
             public void onResponse(User user) {
-                if (user.isResult()){
+                if (user.isResult()) {
                     saveUser(user);
                     loginSuccess();
-                }else {
+                } else {
                     pd.dismiss();
-                    Utils.showToast(mContext,Utils.getResourceString(mContext,user.getMsg()),Toast.LENGTH_SHORT);
+                    Utils.showToast(mContext, Utils.getResourceString(mContext, user.getMsg()), Toast.LENGTH_SHORT);
                 }
             }
         };
@@ -237,12 +248,28 @@ public class LoginActivity extends BaseActivity {
             // 处理好友和群组
             initializeContacts();
             //下载用户头像到SD卡里面
-            //final OkHttpUtils
+            final OkHttpUtils<Message> utils = new OkHttpUtils<Message>();
+            utils.url(SuperWeChatApplication.SERVER_ROOT)//设置地址
+                    .addParam(I.KEY_REQUEST, I.REQUEST_DOWNLOAD_AVATAR)//添加参数
+                    .addParam(I.AVATAR_TYPE, currentUsername)//添加用户账号
+                    .doInBackground(new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+                            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
+                        @Override
+                        public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                            String avatarPath = I.AVATAR_TYPE_USER_PATH + I.BACKSLASH + currentUsername + I.AVATAR_SUFFIX_JPG;
+                            File file = OnSetAvatarListener.getAvatarFile(mContext, avatarPath);
+                            FileOutputStream out = null;
+                            out = new FileOutputStream(file);
+                            utils.downloadFile(response, file, false);
 
-
-
-        }catch (Exception e) {
+                        }
+                    }).execute(null);
+            initializeContacts();
+        } catch (Exception e) {
             e.printStackTrace();
             // 取好友或者群聊失败，不让进入主页面
             runOnUiThread(new Runnable() {
