@@ -3,16 +3,15 @@ package cn.ucai.superwechat.task;
 import android.content.Context;
 import android.content.Intent;
 
-
 import com.android.volley.Response;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.activity.BaseActivity;
 import cn.ucai.superwechat.bean.Contact;
+import cn.ucai.superwechat.bean.Group;
 import cn.ucai.superwechat.data.ApiParams;
 import cn.ucai.superwechat.data.GsonRequest;
 import cn.ucai.superwechat.utils.Utils;
@@ -43,23 +42,30 @@ public class DownloadPublicGroupTask extends BaseActivity {
     }
 
     public void execute() {
-        executeRequest(new GsonRequest<Contact[]>(path, Contact[].class
-                , responseDownloadPublicGroupTaskListener(), errorListener()));
+        executeRequest(new GsonRequest<Group[]>(path, Group[].class,
+                responseDownloadPublicGroupTaskListener(), errorListener()));
     }
 
-    private Response.Listener<Contact[]> responseDownloadPublicGroupTaskListener() {
-        return new Response.Listener<Contact[]>() {
-            public void onResponse(Contact[] response) {
-                if (response != null) {
-                    ArrayList<Contact> contactList =
-                            SuperWeChatApplication.getInstance().getContactList();
-                    ArrayList<Contact> list = Utils.array2List(response);
-                    contactList.clear();
-                    contactList.addAll(list);
-                    mContext.sendBroadcast(new Intent("update_public_group"));
+    private Response.Listener<Group[]> responseDownloadPublicGroupTaskListener() {
+        return new Response.Listener<Group[]>() {
+            @Override
+            public void onResponse(Group[] groups) {
+                if (groups != null) {
+                    ArrayList<Group> list = Utils.array2List(groups);
+                    ArrayList<Group> publicGroupList = SuperWeChatApplication
+                            .getInstance()
+                            .getPublicGroupList();
+                    for (Group g : list) {
+                        if (!publicGroupList.contains(g)) {
+                            publicGroupList.add(g);
+
+                        }
+                    }
+                    mContext.sendStickyBroadcast(new Intent("update_public_group"));
                 }
             }
-        };
 
+        };
     }
+
 }
