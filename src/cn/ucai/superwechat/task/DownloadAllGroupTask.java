@@ -52,7 +52,7 @@ public class DownloadAllGroupTask extends BaseActivity {
         return new Response.Listener<Group[]>() {
             @Override
             public void onResponse(Group[] groups) {
-                if (groups != null) {
+                if (groups != null && groups.length>0) {
                     ArrayList<Group> list = Utils.array2List(groups);
                     ArrayList<Group> publicGroupList = SuperWeChatApplication
                             .getInstance()

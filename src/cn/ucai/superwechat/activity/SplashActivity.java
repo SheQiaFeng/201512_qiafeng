@@ -30,14 +30,14 @@ import cn.ucai.superwechat.task.DownloadPublicGroupTask;
 public class SplashActivity extends BaseActivity {
     private RelativeLayout rootLayout;
     private TextView versionText;
-
+    Context mContext;
     private static final int sleepTime = 2000;
 
     @Override
     protected void onCreate(Bundle arg0) {
         setContentView(R.layout.activity_splash);
         super.onCreate(arg0);
-
+        mContext=this;
         rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
         versionText = (TextView) findViewById(R.id.tv_version);
 
@@ -50,6 +50,24 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        if (DemoHXSDKHelper.getInstance().isLogined()){
+//            User user = SuperWeChatApplication.getInstance().getUser();
+//            SuperWeChatApplication instance = SuperWeChatApplication.getInstance();
+//            instance.setUser(user);
+//            // 登陆成功，保存用户名密码
+//            instance.setUserName(user.getMUserName());
+//            instance.setPassword(user.getMUserPassword());
+//            SuperWeChatApplication.currentUserNick = user.getMUserNick();
+//            new DownloadContactListTask(mContext,user.getMUserName());//下载联系人
+//            new DownloadAllGroupTask(mContext,user.getMUserName());
+//            new DownloadPublicGroupTask(mContext,user.getMUserName()
+//                    ,I.PAGE_ID_DEFAULT,I.PAGE_SIZE_DEFAULT);
+//
+//        }
+
+
+
+
         if (DemoHXSDKHelper.getInstance().isLogined()) {
             String username = SuperWeChatApplication.getInstance().getUserName();
             UserDao dao = new UserDao(SplashActivity.this);

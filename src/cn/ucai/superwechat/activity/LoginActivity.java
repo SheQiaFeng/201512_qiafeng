@@ -60,6 +60,9 @@ import cn.ucai.superwechat.db.EMUserDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EMUser;
 import cn.ucai.superwechat.listener.OnSetAvatarListener;
+import cn.ucai.superwechat.task.DownloadAllGroupTask;
+import cn.ucai.superwechat.task.DownloadContactListTask;
+import cn.ucai.superwechat.task.DownloadPublicGroupTask;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.Utils;
@@ -274,6 +277,20 @@ public class LoginActivity extends BaseActivity {
 
                         }
                     }).execute(null);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {      //执行下载任务
+                    new DownloadContactListTask(mContext,currentUsername);//下载联系人
+                    new DownloadAllGroupTask(mContext,currentUsername);
+                    new DownloadPublicGroupTask(mContext,currentUsername,I.PAGE_ID_DEFAULT,I.PAGE_SIZE_DEFAULT);
+                    //执行命令
+                }
+            });
+
+
+
+
+
             initializeContacts();
         } catch (Exception e) {
             e.printStackTrace();
