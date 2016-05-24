@@ -13,14 +13,6 @@
  */
 package cn.ucai.superwechat.fragment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -51,6 +43,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.easemob.chat.EMContactManager;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.activity.AddContactActivity;
@@ -58,25 +61,15 @@ import cn.ucai.superwechat.activity.ChatActivity;
 import cn.ucai.superwechat.activity.GroupsActivity;
 import cn.ucai.superwechat.activity.MainActivity;
 import cn.ucai.superwechat.activity.NewFriendsMsgActivity;
-import cn.ucai.superwechat.activity.PublicChatRoomsActivity;
-import cn.ucai.superwechat.activity.RobotsActivity;
+import cn.ucai.superwechat.adapter.ContactAdapter;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper.HXSyncListener;
-
-import com.easemob.chat.EMContactManager;
-
-import cn.ucai.superwechat.Constant;
-import cn.ucai.superwechat.DemoHXSDKHelper;
-import cn.ucai.superwechat.adapter.ContactAdapter;
 import cn.ucai.superwechat.bean.Contact;
-import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.EMUserDao;
+import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.EMUser;
 import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.widget.Sidebar;
-
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.EMLog;
 
 /**
  * 联系人列表页
@@ -97,11 +90,11 @@ public class ContactlistFragment extends Fragment {
     HXContactInfoSyncListener contactInfoSyncListener;
     View progressBar;
     Handler handler = new Handler();
-    private EMUser toBeProcessEMUser;
+    private Contact toBeProcessEMUser;
     private String toBeProcessUsername;
     ContactListChangedReceiver mReceiver;
-    ArrayList<Contact> mContactList;
 
+    private ArrayList<Contact> mContactList=new ArrayList<Contact>();
     class HXContactSyncListener implements HXSDKHelper.HXSyncListener {
         @Override
         public void onSyncSucess(final boolean success) {
@@ -218,13 +211,13 @@ public class ContactlistFragment extends Fragment {
         });
 
         // 设置adapter
-        adapter = new ContactAdapter(getActivity(), cn.ucai.superwechat.R.layout.row_contact, contactList);
+        adapter = new ContactAdapter(getActivity(), cn.ucai.superwechat.R.layout.row_contact, mContactList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String username = adapter.getItem(position).getUsername();
+                String username = adapter.getItem(position).getMContactCname();
                 if (Constant.NEW_FRIENDS_USERNAME.equals(username)) {
                     // 进入申请与通知页面
                     EMUser EMUser = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
@@ -235,7 +228,7 @@ public class ContactlistFragment extends Fragment {
                     startActivity(new Intent(getActivity(), GroupsActivity.class));
                 } else {
                     // demo中直接进入聊天页面，实际一般是进入用户详情页
-                    startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", adapter.getItem(position).getUsername()));
+                    startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", adapter.getItem(position).getMContactCname()));
                 }
             }
         });
@@ -288,7 +281,7 @@ public class ContactlistFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (((AdapterContextMenuInfo) menuInfo).position > 1) {
             toBeProcessEMUser = adapter.getItem(((AdapterContextMenuInfo) menuInfo).position);
-            toBeProcessUsername = toBeProcessEMUser.getUsername();
+            toBeProcessUsername = toBeProcessEMUser.getMContactCname();
             getActivity().getMenuInflater().inflate(cn.ucai.superwechat.R.menu.context_contact_list, menu);
         }
     }
@@ -301,7 +294,7 @@ public class ContactlistFragment extends Fragment {
                 deleteContact(toBeProcessEMUser);
                 // 删除相关的邀请消息
                 InviteMessgeDao dao = new InviteMessgeDao(getActivity());
-                dao.deleteMessage(toBeProcessEMUser.getUsername());
+                dao.deleteMessage(toBeProcessEMUser.getMContactCname());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -335,7 +328,7 @@ public class ContactlistFragment extends Fragment {
      *
      * @param tobeDeleteEMUser
      */
-    public void deleteContact(final EMUser tobeDeleteEMUser) {
+    public void deleteContact(final Contact tobeDeleteEMUser) {
         String st1 = getResources().getString(cn.ucai.superwechat.R.string.deleting);
         final String st2 = getResources().getString(cn.ucai.superwechat.R.string.Delete_failed);
         final ProgressDialog pd = new ProgressDialog(getActivity());
@@ -345,11 +338,11 @@ public class ContactlistFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    EMContactManager.getInstance().deleteContact(tobeDeleteEMUser.getUsername());
+                    EMContactManager.getInstance().deleteContact(tobeDeleteEMUser.getMContactCname());
                     // 删除db和内存中此用户的数据
                     EMUserDao dao = new EMUserDao(getActivity());
-                    dao.deleteContact(tobeDeleteEMUser.getUsername());
-                    ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteEMUser.getUsername());
+                    dao.deleteContact(tobeDeleteEMUser.getMContactCname());
+                    ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteEMUser.getMContactCname());
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();

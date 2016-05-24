@@ -64,7 +64,11 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
 		copyEMUserList.addAll(objects);
 		layoutInflater = LayoutInflater.from(context);
 	}
-	
+
+	public void remove(Contact tobeDeleteEMUser) {
+		EMUserList.remove(tobeDeleteEMUser);
+	}
+
 	private static class ViewHolder {
 	    NetworkImageView avatar;
 	    TextView unreadMsgView;
