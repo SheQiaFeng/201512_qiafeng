@@ -227,7 +227,7 @@ public class LoginActivity extends BaseActivity {
                 if (user.isResult()) {
                     saveUser(user);
                     user.setMUserPassword(MD5.getData(user.getMUserPassword()));//利用MD5进行密码匹配
-                    UserDao dao=new UserDao(mContext);
+                    UserDao dao = new UserDao(mContext);
                     dao.addUser(user);
                     loginSuccess();
                 } else {
@@ -280,15 +280,12 @@ public class LoginActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {      //执行下载任务
-                    new DownloadContactListTask(mContext,currentUsername);//下载联系人
-                    new DownloadAllGroupTask(mContext,currentUsername);
-                    new DownloadPublicGroupTask(mContext,currentUsername,I.PAGE_ID_DEFAULT,I.PAGE_SIZE_DEFAULT);
+                    new DownloadContactListTask(mContext, currentUsername);//下载联系人
+                    new DownloadAllGroupTask(mContext, currentUsername);
+                    new DownloadPublicGroupTask(mContext, currentUsername, I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT);
                     //执行命令
                 }
             });
-
-
-
 
 
             initializeContacts();
@@ -358,12 +355,12 @@ public class LoginActivity extends BaseActivity {
         userlist.put(Constant.GROUP_USERNAME, groupEMUser);
 
         // 添加"Robot"
-        EMUser robotEMUser = new EMUser();
-        String strRobot = getResources().getString(R.string.robot_chat);
-        robotEMUser.setUsername(Constant.CHAT_ROBOT);
-        robotEMUser.setNick(strRobot);
-        robotEMUser.setHeader("");
-        userlist.put(Constant.CHAT_ROBOT, robotEMUser);
+//        EMUser robotEMUser = new EMUser();
+//        String strRobot = getResources().getString(R.string.robot_chat);
+//        robotEMUser.setUsername(Constant.CHAT_ROBOT);
+//        robotEMUser.setNick(strRobot);
+//        robotEMUser.setHeader("");
+//        userlist.put(Constant.CHAT_ROBOT, robotEMUser);
 
         // 存入内存
         ((DemoHXSDKHelper) HXSDKHelper.getInstance()).setContactList(userlist);

@@ -470,12 +470,12 @@ public class ContactlistFragment extends Fragment {
 			}
 		});
 
-		if(users.get(Constant.CHAT_ROBOT)!=null){
-			contactList.add(0, users.get(Constant.CHAT_ROBOT));
-		}
+//		if(users.get(Constant.CHAT_ROBOT)!=null){
+//			contactList.add(0, users.get(Constant.CHAT_ROBOT));
+//		}
 		// 加入"群聊"和"聊天室"
-        if(users.get(Constant.CHAT_ROOM) != null)
-            contactList.add(0, users.get(Constant.CHAT_ROOM));
+//        if(users.get(Constant.CHAT_ROOM) != null)
+//            contactList.add(0, users.get(Constant.CHAT_ROOM));
         if(users.get(Constant.GROUP_USERNAME) != null)
             contactList.add(0, users.get(Constant.GROUP_USERNAME));
         
