@@ -128,6 +128,22 @@ public class UserUtils {
     		textView.setText(username);
     	}
     }
+
+    //设置UserBean的nick
+    public static void setUserBeanNick(String username,TextView textView){
+        Contact contact = getUserBeanInfo(username);
+        if (contact!=null) {
+            if (contact.getMUserNick() != null) {
+                textView.setText(contact.getMUserNick());
+
+            } else if (contact.getMContactCname() != null) {
+                textView.setText(contact.getMContactCid());
+            }
+        }else {
+            textView.setText(username);
+        }
+
+    }
     
     /**
      * 设置当前用户昵称
