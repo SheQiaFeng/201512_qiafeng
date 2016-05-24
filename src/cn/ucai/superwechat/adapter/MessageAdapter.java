@@ -575,6 +575,7 @@ public class MessageAdapter extends BaseAdapter{
 	        //显示自己头像
 	        UserUtils.setCurrentUserAvatar(imageView);
 	    }else{
+				 //设置对方的头像
 	        UserUtils.setUserBeanAvatar(message.getFrom(), imageView);
 	    }
 	    imageView.setOnClickListener(new View.OnClickListener() {

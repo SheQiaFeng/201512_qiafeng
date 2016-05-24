@@ -271,6 +271,7 @@ public class ContactlistFragment extends Fragment {
 		} else {
 			progressBar.setVisibility(View.GONE);
 		}
+		registerContactListChangedReceiver();
 	}
 
 	@Override
@@ -431,6 +432,9 @@ public class ContactlistFragment extends Fragment {
 		if (mReceiver!=null){
 			getActivity().unregisterReceiver(mReceiver);
 		}
+		if (mReceiver!=null){
+			getActivity().unregisterReceiver(mReceiver);
+		}
 		super.onDestroy();
 	}
 
@@ -503,6 +507,7 @@ public class ContactlistFragment extends Fragment {
 		}
 
 	}
+	//广播接收器
 	class ContactListChangedReceiver extends BroadcastReceiver{
 
 		@Override
@@ -510,9 +515,10 @@ public class ContactlistFragment extends Fragment {
 			refresh();
 		}
 	}
-
+		//注册和注销方法
 	private void registerContactListChangedReceiver(){
 		mReceiver=new ContactListChangedReceiver();
+		//拦截
 		IntentFilter filter=new IntentFilter("update_contact_list");
 		getActivity().registerReceiver(mReceiver,filter);
 
