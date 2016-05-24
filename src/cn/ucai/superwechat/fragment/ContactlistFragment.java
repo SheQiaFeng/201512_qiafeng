@@ -22,8 +22,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -91,6 +93,7 @@ public class ContactlistFragment extends Fragment {
 	Handler handler = new Handler();
     private EMUser toBeProcessEMUser;
     private String toBeProcessUsername;
+	ContactListChangedReceiver mReceiver;
 
 	class HXContactSyncListener implements HXSDKHelper.HXSyncListener {
 		@Override
@@ -431,6 +434,9 @@ public class ContactlistFragment extends Fragment {
 		if(contactInfoSyncListener != null){
 			((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().removeSyncContactInfoListener(contactInfoSyncListener);
 		}
+		if (mReceiver!=null){
+			getActivity().unregisterReceiver(mReceiver);
+		}
 		super.onDestroy();
 	}
 	
@@ -502,5 +508,19 @@ public class ContactlistFragment extends Fragment {
 	    	outState.putBoolean(Constant.ACCOUNT_REMOVED, true);
 	    }
 	    
+	}
+	class ContactListChangedReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+		refresh();
+		}
+	}
+
+	private void registerContactListChangedReceiver(){
+		mReceiver=new ContactListChangedReceiver();
+		IntentFilter filter=new IntentFilter("update_contact_list");
+		getActivity().registerReceiver(mReceiver,filter);
+
 	}
 }

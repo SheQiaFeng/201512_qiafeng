@@ -27,19 +27,26 @@ public class UserUtils {
      * @return
      */
     public static EMUser getUserInfo(String username){
-        EMUser EMUser = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().get(username);
-        if(EMUser == null){
-            EMUser = new EMUser(username);
+        EMUser user = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList().get(username);
+        if(user == null){
+            user = new EMUser(username);
         }
             
-        if(EMUser != null){
+        if(user != null){
             //demo没有这些数据，临时填充
-        	if(TextUtils.isEmpty(EMUser.getNick()))
-        		EMUser.setNick(username);
+        	if(TextUtils.isEmpty(user.getNick()))
+                user.setNick(username);
         }
-        return EMUser;
+        return user;
     }
-    
+
+    public static Contact getUserBeanInfo(String  username){
+        Contact contact = SuperWeChatApplication.getInstance().getUserList().get(username);
+        return contact;
+    }
+
+
+
     /**
      * 设置用户头像
      * @param username
@@ -52,6 +59,20 @@ public class UserUtils {
             Picasso.with(context).load(cn.ucai.superwechat.R.drawable.default_avatar).into(imageView);
         }
     }
+
+    public static void setUserBeanAvatar(String username,NetworkImageView imageView){
+        Contact contact=getUserBeanInfo(username);
+        if (contact!=null&&contact.getMContactCname()!=null){
+            setUserAvatar(getAvatarPath(username),imageView);
+             }
+    }
+    private  static void setUserAvatar(String url,NetworkImageView imageView){
+        if (url==null||url.isEmpty())return;
+        imageView.setDefaultImageResId(R.drawable.default_avatar);
+        imageView.setImageUrl(url, RequestManager.getImageLoader());
+        imageView.setErrorImageResId(R.drawable.default_avatar);
+    }
+
 	//新加的方法
 //	private static String getAvatarPath(String username) {
 //		Log.i("main","username:  "+username);
@@ -71,17 +92,18 @@ public class UserUtils {
 //
 //	}
 	//新加的方法
-	public static void setUserAvatar(String url, NetworkImageView imageView) {
-		Log.i("main","url:  "+url);
-		if (url==null || url.isEmpty()) return;
-		imageView.setDefaultImageResId(R.drawable.default_avatar);
-		imageView.setImageUrl(url, RequestManager.getImageLoader());
-		imageView.setErrorImageResId(R.drawable.default_avatar);
-	}
+//	public static void setUserAvatar(String url, NetworkImageView imageView) {
+//		Log.i("main","url:  "+url);
+//		if (url==null || url.isEmpty()) return;
+//		imageView.setDefaultImageResId(R.drawable.default_avatar);
+//		imageView.setImageUrl(url, RequestManager.getImageLoader());
+//		imageView.setErrorImageResId(R.drawable.default_avatar);
+//	}
 	//新加的方法
 	private static String getAvatarPath(String username) {
 		Log.i("main","username:  "+username);
 		if (username==null || username.isEmpty()) return null;
+
 		return I.REQUEST_DOWNLOAD_AVATAR_USER + username;
 	}
 
