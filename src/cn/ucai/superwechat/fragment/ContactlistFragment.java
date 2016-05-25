@@ -463,13 +463,10 @@ public class ContactlistFragment extends Fragment {
         if (contactInfoSyncListener != null) {
             ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getUserProfileManager().removeSyncContactInfoListener(contactInfoSyncListener);
         }
+        //解除广播注册
         if (mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
         }
-        if (mReceiver != null) {
-            getActivity().unregisterReceiver(mReceiver);
-        }
-
         super.onDestroy();
     }
 
