@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -438,6 +439,7 @@ public class ContactlistFragment extends Fragment {
         if (mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
         }
+
         super.onDestroy();
     }
 

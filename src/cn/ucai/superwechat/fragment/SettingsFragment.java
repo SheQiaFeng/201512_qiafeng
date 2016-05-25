@@ -366,7 +366,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						pd.dismiss();
-
 						SuperWeChatApplication instance=
 								SuperWeChatApplication.getInstance();
 						instance.getContactList().clear();
@@ -376,7 +375,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 						// 重新显示登陆页面
 						((MainActivity) getActivity()).finish();
 						startActivity(new Intent(getActivity(), LoginActivity.class));
-						
 					}
 				});
 			}
