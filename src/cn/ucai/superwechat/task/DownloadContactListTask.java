@@ -2,7 +2,7 @@ package cn.ucai.superwechat.task;
 
 import android.content.Context;
 import android.content.Intent;
-
+import android.util.Log;
 
 import com.android.volley.Response;
 
@@ -37,6 +37,8 @@ public class DownloadContactListTask extends BaseActivity {
             path = new ApiParams()
                     .with(I.Contact.USER_NAME, username)
                     .getRequestUrl(I.REQUEST_DOWNLOAD_CONTACT_ALL_LIST);
+            execute();
+//            Log.i("path","++++++++++"+path);
         } catch (Exception e) {
             e.printStackTrace();
         }

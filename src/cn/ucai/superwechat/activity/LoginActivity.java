@@ -198,6 +198,7 @@ public class LoginActivity extends BaseActivity {
         if (user != null) {
             if (user.getMUserPassword().equals(MD5.getData(currentPassword))) {
                 saveUser(user);
+
                 loginSuccess();
             } else {
                 pd.dismiss();
@@ -270,6 +271,7 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onResponse(com.squareup.okhttp.Response response) throws IOException {
                             String avatarPath = I.AVATAR_TYPE_USER_PATH + I.BACKSLASH + currentUsername + I.AVATAR_SUFFIX_JPG;
+//                            Log.i("Login","--------------"+avatarPath);
                             File file = OnSetAvatarListener.getAvatarFile(mContext, avatarPath);
                             FileOutputStream out = null;
                             out = new FileOutputStream(file);
@@ -280,6 +282,7 @@ public class LoginActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {      //执行下载任务
+                    Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
                     new DownloadContactListTask(mContext, currentUsername);//下载联系人
                     new DownloadAllGroupTask(mContext, currentUsername);
                     new DownloadPublicGroupTask(mContext, currentUsername, I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT);

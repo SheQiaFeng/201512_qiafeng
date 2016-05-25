@@ -67,7 +67,7 @@ public class UserUtils {
     //设置真实的用户头像  仿写
     public static void setUserBeanAvatar(String username,NetworkImageView imageView){
         Contact contact=getUserBeanInfo(username);
-        Log.e(TAG,"contact="+contact);
+        Log.e(TAG,"真实用户头像仿写="+contact);
         if (contact!=null&&contact.getMContactCname()!=null){
             setUserAvatar(getAvatarPath(username),imageView);
              }
