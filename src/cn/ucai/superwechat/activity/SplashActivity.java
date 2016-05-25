@@ -74,7 +74,7 @@ public class SplashActivity extends BaseActivity {
 
             User user=dao.findUserByUserName(username);
             SuperWeChatApplication.getInstance().setUser(user);
-            Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
 
             //登录成功
             if(user!=null){
