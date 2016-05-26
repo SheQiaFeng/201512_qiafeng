@@ -282,7 +282,7 @@ public class LoginActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {      //执行下载任务
-                    Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
                     new DownloadContactListTask(mContext, currentUsername);//下载联系人
                     new DownloadAllGroupTask(mContext, currentUsername);
                     new DownloadPublicGroupTask(mContext, currentUsername, I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT);

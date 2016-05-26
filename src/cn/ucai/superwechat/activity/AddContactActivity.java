@@ -125,18 +125,18 @@ public class AddContactActivity extends BaseActivity {
                 if (user != null) {
                     HashMap<String, Contact> userList = SuperWeChatApplication.getInstance().getUserList();
                     if (userList.containsKey(user.getMUserName())) {
-                        startActivity(new Intent(AddContactActivity.this,UserProfileActivity.class)
+                        startActivity(new Intent(AddContactActivity.this,UserProfileActivity.class)//如果是好友，就跳转到详细页面
                         .putExtra("username",user.getMUserName()));
 
                     } else {
-                        UserUtils.setUserBeanAvatar(user, avatar);
+                        UserUtils.setUserBeanAvatar(user, avatar);//如果不是好友就显示用户的头像，昵称
                         UserUtils.setUserBeanNick(user, nameText);
-                        searchedUserLayout.setVisibility(View.VISIBLE);
+                        searchedUserLayout.setVisibility(View.VISIBLE);//隐藏无结果
                     }
                     mTvNothing.setVisibility(View.GONE);
                 }else {
-                        mTvNothing.setVisibility(View.VISIBLE);
-                        searchedUserLayout.setVisibility(View.GONE);
+                        mTvNothing.setVisibility(View.VISIBLE);//显示无结果
+                        searchedUserLayout.setVisibility(View.GONE);//隐藏之前搜索的用户头像昵称
                     }
                 }
             }
