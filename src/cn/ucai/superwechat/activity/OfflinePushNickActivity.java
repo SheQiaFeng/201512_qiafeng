@@ -2,6 +2,7 @@ package cn.ucai.superwechat.activity;
 
 import com.easemob.chat.EMChatManager;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
@@ -46,6 +47,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
 								inputNickName.getText().toString());
+
 						if (!updatenick) {
 							runOnUiThread(new Runnable() {
 								public void run() {

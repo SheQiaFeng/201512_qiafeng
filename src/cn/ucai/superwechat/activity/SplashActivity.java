@@ -70,17 +70,16 @@ public class SplashActivity extends BaseActivity {
 
 
         if (DemoHXSDKHelper.getInstance().isLogined()) {
-            Log.i("main","-----------------------------");
+           // Log.i("main","-----------------------------");
             String username = SuperWeChatApplication.getInstance().getUserName();
             UserDao dao = new UserDao(SplashActivity.this);
-
             User user=dao.findUserByUserName(username);
             SuperWeChatApplication.getInstance().setUser(user);
            // Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
-            Log.i("main","----------------11111111111111-------------");
-
+           // Log.i("main","----------------11111111111111-------------");
             //登录成功
             if(user!=null){
+                Log.i("main","----------------11111111111111-------------"+user);
                 SuperWeChatApplication.currentUserNick = user.getMUserNick();
                 new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
                 new DownloadAllGroupTask(SplashActivity.this, user.getMUserName()).execute();
