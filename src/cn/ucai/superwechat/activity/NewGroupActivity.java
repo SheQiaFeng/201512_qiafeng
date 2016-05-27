@@ -13,7 +13,9 @@
  */
 package cn.ucai.superwechat.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,11 +24,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.easemob.chat.EMGroupManager;
+
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.Contact;
+import cn.ucai.superwechat.listener.OnSetAvatarListener;
+
 import com.easemob.exceptions.EaseMobException;
 
 public class NewGroupActivity extends BaseActivity {
@@ -36,17 +45,20 @@ public class NewGroupActivity extends BaseActivity {
 	private CheckBox checkBox;
 	private CheckBox memberCheckbox;
 	private LinearLayout openInviteContainer;
+	private ImageView mSetGroupIcon;
+	Activity mContext;
+	ProgressDialog pd;
+	String GroupName;
+	OnSetAvatarListener mOnSetGroupAvatarListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_group);
-		groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
-		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
-		checkBox = (CheckBox) findViewById(R.id.cb_public);
-		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
+
 		openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
-		
+		initView();
+		setListener();
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -59,6 +71,46 @@ public class NewGroupActivity extends BaseActivity {
 			}
 		});
 	}
+	private void initView() {
+		mSetGroupIcon = (ImageView) findViewById(R.id.iv_group_avatar);
+		groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
+		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
+		checkBox = (CheckBox) findViewById(R.id.cb_public);
+		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
+	}
+
+	private void setListener() {
+		setOnCheckchangedListener();
+		setSaveGroupClickListener();
+		setGroupIconClickListener();
+	}
+
+	private void setGroupIconClickListener() {
+		findViewById(R.id.set_group_photo).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mOnSetGroupAvatarListener = new OnSetAvatarListener(mContext,R.id.ll_group,
+						getGroupName(), I.AVATAR_TYPE_GROUP_PATH);
+			}
+		});
+
+	}
+	private String getGroupName() {
+		GroupName = System.currentTimeMillis() + "";//毫秒数
+		return GroupName;
+	}
+
+	private void setSaveGroupClickListener() {
+
+
+
+	}
+
+	private void setOnCheckchangedListener() {
+
+	}
+
+
 
 	/**
 	 * @param v
@@ -82,6 +134,7 @@ public class NewGroupActivity extends BaseActivity {
 		String st1 = getResources().getString(R.string.Is_to_create_a_group_chat);
 		final String st2 = getResources().getString(R.string.Failed_to_create_groups);
 		if (resultCode == RESULT_OK) {
+			mOnSetGroupAvatarListener.setAvatar(requestCode,data,mSetGroupIcon);
 			//新建群组
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setMessage(st1);
@@ -115,7 +168,7 @@ public class NewGroupActivity extends BaseActivity {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
-								Toast.makeText(NewGroupActivity.this, st2 + e.getLocalizedMessage(), 1).show();
+								Toast.makeText(NewGroupActivity.this, st2 + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 							}
 						});
 					}

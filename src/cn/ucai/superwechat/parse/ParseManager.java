@@ -114,27 +114,29 @@ public class ParseManager {
 	/**
      * 设置hearder属性，方便通讯中对联系人按header分类显示，以及通过右侧ABCD...字母栏快速定位联系人
      * 
-     * @param username
+     * @param
      * @param EMUser
      */
     private static void setUserHearder(EMUser EMUser) {
-        String headerName = null;
-        if (!TextUtils.isEmpty(EMUser.getNick())) {
-            headerName = EMUser.getNick();
-        } else {
-            headerName = EMUser.getUsername();
-        }
-        if (Character.isDigit(headerName.charAt(0))) {
-            EMUser.setHeader("#");
-        } else {
-            EMUser.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
-                    .toUpperCase());
-            char header = EMUser.getHeader().toLowerCase().charAt(0);
-            if (header < 'a' || header > 'z') {
-                EMUser.setHeader("#");
-            }
-        }
-    }
+		String headerName = null;
+		if (!TextUtils.isEmpty(EMUser.getNick())) {
+			headerName = EMUser.getNick();
+		} else {
+			headerName = EMUser.getUsername();
+		}
+		if (headerName != null) {
+			if (Character.isDigit(headerName.charAt(0))) {
+				EMUser.setHeader("#");
+			} else {
+				EMUser.setHeader(HanziToPinyin.getInstance().get(headerName.trim().substring(0, 1)).get(0).target.substring(0, 1)
+						.toUpperCase());
+				char header = EMUser.getHeader().toLowerCase().charAt(0);
+				if (header < 'a' || header > 'z') {
+					EMUser.setHeader("#");
+				}
+			}
+		}
+	}
 	
 	public void asyncGetCurrentUserInfo(final EMValueCallBack<EMUser> callback){
 		final String username = EMChatManager.getInstance().getCurrentUser();

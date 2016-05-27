@@ -593,15 +593,15 @@ public class MainActivity extends BaseActivity implements EMEventListener {
         @Override
         public void onContactDeleted(final List<String> usernameList) {
             // 被删除
-            Map<String, EMUser> localUsers = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList();
-            HashMap<String, Contact> userList = SuperWeChatApplication.getInstance().getUserList();
-            ArrayList<String> toDeleteUserNames=new ArrayList<String >();
-            for (String username : usernameList) {
-                localUsers.remove(username);
-                EMUserDao.deleteContact(username);
-                inviteMessgeDao.deleteMessage(username);
-                if (userList.containsKey(username)){
-                    toDeleteUserNames.add(username);
+                    Map<String, EMUser> localUsers = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList();
+                    HashMap<String, Contact> userList = SuperWeChatApplication.getInstance().getUserList();
+                    ArrayList<String> toDeleteUserNames=new ArrayList<String >();
+                    for (String username : usernameList) {
+                        localUsers.remove(username);
+                        EMUserDao.deleteContact(username);
+                        inviteMessgeDao.deleteMessage(username);
+                        if (userList.containsKey(username)){
+                            toDeleteUserNames.add(username);
                 }
             }
             if (toDeleteUserNames.size()>0){

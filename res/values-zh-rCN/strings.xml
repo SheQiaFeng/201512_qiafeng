@@ -168,6 +168,7 @@
     <string name="get_failed_please_check">获取失败,请检查网络或稍后再试</string>
     <string name="people">人)</string>
     <string name="being_added">正在添加...</string>
+    <string name="set_group_icon" >设置群头像</string>
     <string name="is_quit_the_group_chat">正在退出群聊...</string>
     <string name="chatting_is_dissolution">正在解散群聊...</string>
     <string name="are_empty_group_of_news">正在清空群消息...</string>

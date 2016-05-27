@@ -79,10 +79,10 @@ public class DemoDBManager {
                 if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
                         || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)) {
                     EMUser.setHeader("");
-                } else if (Character.isDigit(headerName.charAt(0))) {
+                } else if (Character.isDigit(headerName.trim().charAt(0))) {
                     EMUser.setHeader("#");
                 } else {
-                    EMUser.setHeader(HanziToPinyin.getInstance().get(headerName.substring(0, 1))
+                    EMUser.setHeader(HanziToPinyin.getInstance().get(headerName.trim().substring(0, 1))
                             .get(0).target.substring(0, 1).toUpperCase());
                     char header = EMUser.getHeader().toLowerCase().charAt(0);
                     if (header < 'a' || header > 'z') {
