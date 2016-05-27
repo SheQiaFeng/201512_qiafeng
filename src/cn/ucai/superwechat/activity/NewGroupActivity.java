@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,16 +29,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.Contact;
+import cn.ucai.superwechat.bean.Group;
+import cn.ucai.superwechat.bean.Message;
+import cn.ucai.superwechat.bean.User;
+import cn.ucai.superwechat.data.ApiParams;
+import cn.ucai.superwechat.data.GsonRequest;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.listener.OnSetAvatarListener;
+import cn.ucai.superwechat.utils.ImageUtils;
+import cn.ucai.superwechat.utils.Utils;
 
 import com.easemob.exceptions.EaseMobException;
+
+import java.io.File;
 
 public class NewGroupActivity extends BaseActivity {
     private EditText groupNameEditText;
@@ -59,6 +72,7 @@ public class NewGroupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
+        mContext=this;
         initView();
         setListener();
         checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -76,7 +90,7 @@ public class NewGroupActivity extends BaseActivity {
 
     private void initView() {
         openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
-        ivAvatar = (ImageView) findViewById(R.id.iv_avatar);
+        ivAvatar = (ImageView) findViewById(R.id.iv_group_avatar);
         groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
         introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
         checkBox = (CheckBox) findViewById(R.id.cb_public);
@@ -90,11 +104,13 @@ public class NewGroupActivity extends BaseActivity {
     }
 
     private void setGroupIconClickListener() {
-        findViewById(R.id.set_group_photo).setOnClickListener(new View.OnClickListener() {
+        Log.e("Login","---11111-----");
+        findViewById(R.id.layout_group_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnSetAvatarListener = new OnSetAvatarListener(mContext, R.id.ll_group,
-                        getavatarName(), I.AVATAR_TYPE_GROUP_PATH);
+                Log.e("Login","--2222222-----");
+                mOnSetAvatarListener = new OnSetAvatarListener(mContext,R.id.layout_new_group,getavatarName(),I.AVATAR_TYPE_GROUP_PATH);
+                Log.e("Login","++++++++++");
             }
         });
 
@@ -218,6 +234,7 @@ public class NewGroupActivity extends BaseActivity {
                         //创建不公开群
                      emGroup=EMGroupManager.getInstance().createPrivateGroup(groupName, desc, members, memberCheckbox.isChecked(), 200);
                     }
+                    creatNewGroupAppServer(emGroup.getGroupId(),groupName,desc,contacts);
                     String hxid = emGroup.getGroupId();
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -236,7 +253,107 @@ public class NewGroupActivity extends BaseActivity {
                 }
 
             }
+
+
         }).start();
+    }
+
+    private void creatNewGroupAppServer(String hxid, String groupName,
+                                        String desc, final Contact[] contacts) {
+        User user = SuperWeChatApplication.getInstance().getUser();
+        boolean ispublic = checkBox.isChecked();
+        boolean isInvites = memberCheckbox.isChecked();
+        //注册环信的账号
+        //首先注册远端服务器账号，并上传头像----OKHttp上传
+        //如果环信注册失败，调用取消注册的方法，删除远端服务器账号和图片
+        //request=register&m
+        File file=new File(ImageUtils.getAvatarPath(mContext,I.AVATAR_TYPE_GROUP_PATH),
+                avatarName +I.AVATAR_SUFFIX_JPG);//获取文件名
+        OkHttpUtils<Group> utils = new OkHttpUtils<Group>();
+        utils.url(SuperWeChatApplication.SERVER_ROOT)
+                .addParam(I.KEY_REQUEST,I.REQUEST_REGISTER)
+                .addParam(I.Group.HX_ID,hxid)
+                .addParam(I.Group.NAME,groupName)
+                .addParam(I.Group.DESCRIPTION,desc)
+                .addParam(I.Group.OWNER,user.getMUserName())
+                .addParam(I.Group.IS_PUBLIC,ispublic+"")
+                .addParam(I.Group.ALLOW_INVITES,isInvites+"")
+                .addParam(I.User.USER_ID,user.getMUserId()+"")
+                .targetClass(Group.class)
+                .addFile(file)
+                .execute(new OkHttpUtils.OnCompleteListener<Group>() {
+                    @Override
+                    public void onSuccess(Group group) {
+                        if (group.isResult()){
+                            if (contacts!=null){
+                                addGroupMembers(group,contacts);
+                            }else {
+                                SuperWeChatApplication.getInstance().getGroupList().add(group);
+                                Intent intent = new Intent("update_group_list").putExtra("group", group);
+                                progressDialog.dismiss();
+                                setResult(RESULT_OK,intent);
+                                finish();
+                            }
+
+                        }else {
+                            pd.dismiss();
+                            Utils.showToast(mContext,Utils.getResourceString(mContext,group.getMsg()),Toast.LENGTH_SHORT);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        pd.dismiss();
+                        Utils.showToast(mContext,error,Toast.LENGTH_SHORT);
+
+
+                    }
+                });
+
+
+
+    }
+
+    private void addGroupMembers(Group group, Contact[] members) {
+        String userIds = "";
+        String userNames = "";
+        for (int i=0;i<members.length;i++) {
+            userIds += members[i].getMContactCid() + ",";
+            userNames += members[i].getMContactCname() + ",";
+
+        }
+        try {
+            String path = new ApiParams()
+                    .with(I.Member.GROUP_HX_ID, group.getMGroupHxid())
+                    .with(I.Member.USER_ID, userIds)
+                    .with(I.Member.USER_NAME, userNames)
+                    .getRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS);
+            executeRequest(new GsonRequest<Message>(path,Message.class,
+                    responserListener(group),errorListener()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Response.Listener<Message> responserListener(final Group group) {
+
+        return new Response.Listener<Message>() {
+            @Override
+            public void onResponse(Message message) {
+                if (message.isResult()) {
+                    progressDialog.dismiss();
+                    SuperWeChatApplication.getInstance().getGroupList().add(group);
+                    Intent intent = new Intent("update_group_list").putExtra("group", group);
+                    setResult(RESULT_OK, intent);
+                } else {
+                    progressDialog.dismiss();
+
+                }
+                finish();
+            }
+        };
     }
 
     public void back(View view) {
