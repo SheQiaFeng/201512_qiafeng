@@ -104,13 +104,13 @@ public class NewGroupActivity extends BaseActivity {
     }
 
     private void setGroupIconClickListener() {
-        Log.e("Login","---11111-----");
+//        Log.e("Login","---11111-----");
         findViewById(R.id.layout_group_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("Login","--2222222-----");
+//                Log.e("Login","--2222222-----");
                 mOnSetAvatarListener = new OnSetAvatarListener(mContext,R.id.layout_new_group,getavatarName(),I.AVATAR_TYPE_GROUP_PATH);
-                Log.e("Login","++++++++++");
+//                Log.e("Login","++++++++++");
             }
         });
 
@@ -125,15 +125,18 @@ public class NewGroupActivity extends BaseActivity {
         findViewById(R.id.btnSaveGroup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // Log.e("Login", "-----000000000000--------");
                 String str6 = getResources().getString(R.string.Group_name_cannot_be_empty);
                 String name = groupNameEditText.getText().toString();
                 if (TextUtils.isEmpty(name)) {
                     Intent intent = new Intent(mContext, AlertDialog.class);
                     intent.putExtra("msg", str6);
+                   /// Log.e("Login", "-----111111111111--------");
                     startActivity(intent);
 
                 } else {
                     // 进通讯录选人
+                  ///  Log.e("Login", "-----222222222222--------");
                     startActivityForResult(new Intent(NewGroupActivity.this, GroupPickContactsActivity.class)
                             .putExtra("groupName", name), CREATE_NEW_GROUP);
                 }
@@ -209,11 +212,13 @@ public class NewGroupActivity extends BaseActivity {
             @Override
             public void run() {
                 // 调用sdk创建群组方法
+                Log.e("Login","------------111111------");
                 String groupName = groupNameEditText.getText().toString().trim();
                 String desc = introductionEditText.getText().toString();
                 Contact[] contacts = (Contact[]) data.getSerializableExtra("newmembers");
                 String[] members = null;
                 String[] memberIds = null;
+                EMGroup emGroup;
 
                 if (contacts != null) {
                     members = new String[contacts.length];
@@ -224,12 +229,12 @@ public class NewGroupActivity extends BaseActivity {
                     }
 
                 }
-                EMGroup emGroup=null;
+
                 try {
                     if (checkBox.isChecked()) {
                         //创建公开群，此种方式创建的群，可以自由加入
                         //创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
-                        EMGroupManager.getInstance().createPublicGroup(groupName, desc, members, true, 200);
+                        emGroup= EMGroupManager.getInstance().createPublicGroup(groupName, desc, members, true, 200);
                     } else {
                         //创建不公开群
                      emGroup=EMGroupManager.getInstance().createPrivateGroup(groupName, desc, members, memberCheckbox.isChecked(), 200);
@@ -260,6 +265,7 @@ public class NewGroupActivity extends BaseActivity {
 
     private void creatNewGroupAppServer(String hxid, String groupName,
                                         String desc, final Contact[] contacts) {
+        Log.e("Login","++++++++++222222++++++++++++"+hxid);
         User user = SuperWeChatApplication.getInstance().getUser();
         boolean ispublic = checkBox.isChecked();
         boolean isInvites = memberCheckbox.isChecked();
