@@ -349,7 +349,6 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
                             Toast.LENGTH_SHORT).show();
                 } else {
                     UserUtils.setCurrentUserAvatar(headAvatar);
-
                     Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatenick_fail),
                             Toast.LENGTH_SHORT).show();
                 }
