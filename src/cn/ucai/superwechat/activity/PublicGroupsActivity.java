@@ -17,8 +17,10 @@ package cn.ucai.superwechat.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,13 +164,36 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                             pb.setVisibility(View.INVISIBLE);
                             footLoadingLayout.setVisibility(View.GONE);
-                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", 0).show();
+                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         }).start();
 	}
+
+    class publicGroupChangedReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadAndShowData();
+        }
+
+        publicGroupChangedReceiver mReceiver;
+
+        private void registerPublicGroupChangedReceiver() {
+            mReceiver = new publicGroupChangedReceiver();
+            IntentFilter filter = new IntentFilter("update_public_group");
+            registerReceiver(mReceiver, filter);
+        }
+
+        protected void onDestroy() {
+           // super.onDestroy();
+            if (mReceiver != null) {
+                unregisterReceiver(mReceiver);
+            }
+        }
+    }
 	/**
 	 * adapter
 	 *
@@ -198,3 +223,5 @@ public class PublicGroupsActivity extends BaseActivity {
 		finish();
 	}
 }
+
+

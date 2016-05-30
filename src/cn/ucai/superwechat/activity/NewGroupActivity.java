@@ -169,6 +169,7 @@ public class NewGroupActivity extends BaseActivity {
         String str6 = getResources().getString(R.string.Group_name_cannot_be_empty);
         String name = groupNameEditText.getText().toString();
         if (TextUtils.isEmpty(name)) {
+            Log.e("Login","name-----------------"+name);
             Intent intent = new Intent(this, AlertDialog.class);
             intent.putExtra("msg", str6);
             startActivity(intent);
@@ -186,11 +187,9 @@ public class NewGroupActivity extends BaseActivity {
         }
         if (requestCode == CREATE_NEW_GROUP) {
             setProgressDialog();
-
             //mOnSetAvatarListener.setAvatar(requestCode,data,ivAvatar);
             //新建群组
             creatNewGroup(data);
-
         } else {
             mOnSetAvatarListener.setAvatar(requestCode, data, ivAvatar);
         }
@@ -207,7 +206,6 @@ public class NewGroupActivity extends BaseActivity {
 
     private void creatNewGroup(final Intent data) {
         final String st2 = getResources().getString(R.string.Failed_to_create_groups);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -219,7 +217,6 @@ public class NewGroupActivity extends BaseActivity {
                 String[] members = null;
                 String[] memberIds = null;
                 EMGroup emGroup;
-
                 if (contacts != null) {
                     members = new String[contacts.length];
                     memberIds = new String[contacts.length];
@@ -229,7 +226,6 @@ public class NewGroupActivity extends BaseActivity {
                     }
 
                 }
-
                 try {
                     if (checkBox.isChecked()) {
                         //创建公开群，此种方式创建的群，可以自由加入
@@ -273,11 +269,13 @@ public class NewGroupActivity extends BaseActivity {
         //首先注册远端服务器账号，并上传头像----OKHttp上传
         //如果环信注册失败，调用取消注册的方法，删除远端服务器账号和图片
         //request=register&m
+        Log.e("Login", "------------33333333333----------");
         File file=new File(ImageUtils.getAvatarPath(mContext,I.AVATAR_TYPE_GROUP_PATH),
                 avatarName +I.AVATAR_SUFFIX_JPG);//获取文件名
+        Log.e("Login", "+++++++++++++++" + file);
         OkHttpUtils<Group> utils = new OkHttpUtils<Group>();
         utils.url(SuperWeChatApplication.SERVER_ROOT)
-                .addParam(I.KEY_REQUEST,I.REQUEST_REGISTER)
+                .addParam(I.KEY_REQUEST,I.REQUEST_CREATE_GROUP)
                 .addParam(I.Group.HX_ID,hxid)
                 .addParam(I.Group.NAME,groupName)
                 .addParam(I.Group.DESCRIPTION,desc)
@@ -296,16 +294,19 @@ public class NewGroupActivity extends BaseActivity {
                             }else {
                                 SuperWeChatApplication.getInstance().getGroupList().add(group);
                                 Intent intent = new Intent("update_group_list").putExtra("group", group);
+                                Log.e("Login", "+++++++4444++++++++");
                                 progressDialog.dismiss();
                                 setResult(RESULT_OK,intent);
                                 finish();
                             }
 
                         }else {
+                            Log.e("Login", "+++++++555555++++++++");
                             pd.dismiss();
                             Utils.showToast(mContext,Utils.getResourceString(mContext,group.getMsg()),Toast.LENGTH_SHORT);
 
                         }
+
                     }
 
                     @Override
