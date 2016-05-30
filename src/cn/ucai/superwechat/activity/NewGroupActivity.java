@@ -210,22 +210,23 @@ public class NewGroupActivity extends BaseActivity {
             @Override
             public void run() {
                 // 调用sdk创建群组方法
-                Log.e("Login","------------111111------");
+               // Log.e("Login","------------111111------");
                 String groupName = groupNameEditText.getText().toString().trim();
                 String desc = introductionEditText.getText().toString();
                 Contact[] contacts = (Contact[]) data.getSerializableExtra("newmembers");
                 String[] members = null;
                 String[] memberIds = null;
-                EMGroup emGroup;
                 if (contacts != null) {
                     members = new String[contacts.length];
                     memberIds = new String[contacts.length];
                     for (int i = 0; i < contacts.length; i++) {
                         members[i] = contacts[i].getMContactCname() + ",";
                         memberIds[i] = contacts[i].getMContactId() + ",";
+                        Log.e("Login", "+++++" + memberIds);
                     }
 
                 }
+                EMGroup emGroup;
                 try {
                     if (checkBox.isChecked()) {
                         //创建公开群，此种方式创建的群，可以自由加入
@@ -261,7 +262,7 @@ public class NewGroupActivity extends BaseActivity {
 
     private void creatNewGroupAppServer(String hxid, String groupName,
                                         String desc, final Contact[] contacts) {
-        Log.e("Login","++++++++++222222++++++++++++"+hxid);
+       // Log.e("Login","++++++++++222222++++++++++++"+hxid);
         User user = SuperWeChatApplication.getInstance().getUser();
         boolean ispublic = checkBox.isChecked();
         boolean isInvites = memberCheckbox.isChecked();
@@ -269,11 +270,11 @@ public class NewGroupActivity extends BaseActivity {
         //首先注册远端服务器账号，并上传头像----OKHttp上传
         //如果环信注册失败，调用取消注册的方法，删除远端服务器账号和图片
         //request=register&m
-        Log.e("Login", "------------33333333333----------");
+      //  Log.e("Login", "------------33333333333----------");
         File file=new File(ImageUtils.getAvatarPath(mContext,I.AVATAR_TYPE_GROUP_PATH),
                 avatarName +I.AVATAR_SUFFIX_JPG);//获取文件名
-        Log.e("Login", "+++++++++++++++" + file);
-        OkHttpUtils<Group> utils = new OkHttpUtils<Group>();
+      //  Log.e("Login", "+++++++++++++++" + file);
+        final OkHttpUtils<Group> utils = new OkHttpUtils<Group>();
         utils.url(SuperWeChatApplication.SERVER_ROOT)
                 .addParam(I.KEY_REQUEST,I.REQUEST_CREATE_GROUP)
                 .addParam(I.Group.HX_ID,hxid)
@@ -294,34 +295,22 @@ public class NewGroupActivity extends BaseActivity {
                             }else {
                                 SuperWeChatApplication.getInstance().getGroupList().add(group);
                                 Intent intent = new Intent("update_group_list").putExtra("group", group);
-                                Log.e("Login", "+++++++4444++++++++");
                                 progressDialog.dismiss();
                                 setResult(RESULT_OK,intent);
                                 finish();
                             }
-
                         }else {
-                            Log.e("Login", "+++++++555555++++++++");
                             pd.dismiss();
                             Utils.showToast(mContext,Utils.getResourceString(mContext,group.getMsg()),Toast.LENGTH_SHORT);
-
                         }
-
                     }
-
                     @Override
                     public void onError(String error) {
                         pd.dismiss();
                         Utils.showToast(mContext,error,Toast.LENGTH_SHORT);
-
-
                     }
                 });
-
-
-
     }
-
     private void addGroupMembers(Group group, Contact[] members) {
         String userIds = "";
         String userNames = "";
@@ -331,6 +320,7 @@ public class NewGroupActivity extends BaseActivity {
 
         }
         try {
+            Log.e("Login", "++++++++++++" + userIds+"++++++"+userNames);
             String path = new ApiParams()
                     .with(I.Member.GROUP_HX_ID, group.getMGroupHxid())
                     .with(I.Member.USER_ID, userIds)
@@ -352,6 +342,7 @@ public class NewGroupActivity extends BaseActivity {
                 if (message.isResult()) {
                     progressDialog.dismiss();
                     SuperWeChatApplication.getInstance().getGroupList().add(group);
+                   // Log.e("Login", "group"+group);
                     Intent intent = new Intent("update_group_list").putExtra("group", group);
                     setResult(RESULT_OK, intent);
                 } else {
