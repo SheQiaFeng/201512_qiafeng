@@ -16,6 +16,7 @@ import cn.ucai.superwechat.activity.MainActivity;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.bean.Contact;
+import cn.ucai.superwechat.bean.Group;
 import cn.ucai.superwechat.bean.User;
 import cn.ucai.superwechat.data.RequestManager;
 import cn.ucai.superwechat.domain.EMUser;
@@ -23,6 +24,8 @@ import cn.ucai.superwechat.domain.EMUser;
 import com.android.volley.toolbox.NetworkImageView;
 import com.easemob.util.HanziToPinyin;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class UserUtils {
     public static final String TAG = "UserUtils";
@@ -66,6 +69,21 @@ public class UserUtils {
             Picasso.with(context).load(cn.ucai.superwechat.R.drawable.default_avatar).into(imageView);
         }
     }
+
+    public static Group getGroupBeanFromHXID(String hxid) {
+        if (hxid != null && !hxid.isEmpty()) {
+            ArrayList<Group> groupArrayList = SuperWeChatApplication.getInstance().getGroupList();
+            for (Group group : groupArrayList) {
+                if (group.getMGroupHxid().equals(hxid)) {
+                    return group;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
     //设置群组头像
     public static void setGroupBeanAvatar(String mGroupHxid, NetworkImageView imageView) {
         if (mGroupHxid != null && !mGroupHxid.isEmpty()) {
