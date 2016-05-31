@@ -60,6 +60,7 @@ public class GroupsActivity extends BaseActivity {
     Handler handler = new Handler();
     GroupListChangedReceiver mGroupListChangedReceiver;
 
+
     class SyncListener implements HXSDKHelper.HXSyncListener {
         @Override
         public void onSyncSucess(final boolean success) {
@@ -257,7 +258,7 @@ public class GroupsActivity extends BaseActivity {
         mReceiver = new GroupListChangedReceiver();
         //拦截
         IntentFilter filter = new IntentFilter("update_group_list");
-        registerReceiver(mGroupListChangedReceiver, filter);
+        registerReceiver(mReceiver, filter);
 
     }
 }

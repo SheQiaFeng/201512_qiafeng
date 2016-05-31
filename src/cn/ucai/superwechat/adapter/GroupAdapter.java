@@ -61,11 +61,10 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
     public GroupAdapter(Context context, int res, ArrayList<Group> groups) {
         this.mContext = context;
         this.inflater = LayoutInflater.from(context);
-
         newGroup = context.getResources().getString(R.string.The_new_group_chat);
         addPublicGroup = context.getResources().getString(R.string.add_public_group_chat);
         mGrouplist = groups;
-        Log.i("main", "GroupAdapter--->onCreate--->mGroupList=" + mGrouplist);
+        Log.i("Login", "GroupAdapter--->onCreate--->mGroupList=" + mGrouplist);
         mCopyGroupList = new ArrayList<Group>();
         mCopyGroupList.addAll(groups);
     }
@@ -92,7 +91,6 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (getItemViewType(position) == 0) {
             if (convertView == null) {
-
                 convertView = inflater.inflate(R.layout.search_bar_with_padding, null);
             }
             final EditText query = (EditText) convertView.findViewById(R.id.query);
@@ -133,15 +131,16 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
             ((TextView) convertView.findViewById(R.id.name)).setText(addPublicGroup);
             ((TextView) convertView.findViewById(R.id.header)).setVisibility(View.VISIBLE);
 
-        } else {
+        } else{
+
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.row_group, null);
             }
             Group group = getItem(position);
+            Log.e("Login", "+++++++++++++++"+group);
             ((TextView) convertView.findViewById(R.id.name)).setText(group.getMGroupName());
             UserUtils.setGroupBeanAvatar(group.getMGroupHxid(),((NetworkImageView) convertView.findViewById(R.id.avatar)));
         }
-
         return convertView;
     }
 
@@ -164,7 +163,7 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
     }
 
     public void initList(ArrayList<Group> list) {
-        Log.i("main", "GroupAdapter-----> initList ---->list=" + list);
+        Log.i("Login", "GroupAdapter-----> initList ---->list=" + list);
         mGrouplist.addAll(list);
         notifyDataSetChanged();
     }
@@ -179,9 +178,8 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
         positionOfSection.put(0, 0);
         sectionOfPosition.put(0, 0);
         for (int i = 1; i < count; i++) {
-
             String letter = getItem(i).getHeader();
-            Log.i("main", "contactadapter getsection getHeader:" + letter + " name:" + getItem(i).getMGroupName());
+            Log.i("Login", "contactadapter getsection getHeader:" + letter + " name:" + getItem(i).getMGroupName());
             int section = list.size() - 1;
             if (list.get(section) != null && !list.get(section).equals(letter)) {
                 list.add(letter);
@@ -224,8 +222,8 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
             if (mOriginalList == null) {
                 mOriginalList = new ArrayList<Group>();
             }
-            Log.i("main", "contacts original size: " + mOriginalList.size());
-            Log.i("main", "contacts copy size: " + mCopyGroupList.size());
+            Log.i("Login", "contacts original size: " + mOriginalList.size());
+            Log.i("Login", "contacts copy size: " + mCopyGroupList.size());
 
             if (prefix == null || prefix.length() == 0) {
                 results.values = mCopyGroupList;
@@ -237,8 +235,8 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
                 for (int i = 0; i < count; i++) {
                     final Group group = mOriginalList.get(i);
                     String username = group.getMGroupName();
-
-                    if (username.contains(prefixString)) {
+                    String id = group.getMGroupHxid();
+                    if (username.contains(prefixString)||username.startsWith(prefixString)||id.contains(prefix)) {
                         newValues.add(group);
                     } else {
                         final String[] words = username.split(" ");
@@ -256,7 +254,7 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
                 results.values = newValues;
                 results.count = newValues.size();
             }
-            Log.i("main", "contacts filter results size: " + results.count);
+            Log.i("Login", "contacts filter results size: " + results.count);
             return results;
         }
 
@@ -265,7 +263,7 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
                                                    FilterResults results) {
             mGrouplist.clear();
             mGrouplist.addAll((List<Group>) results.values);
-            Log.i("main", "publish contacts filter results size: " + results.count);
+            Log.i("Login", "publish contacts filter results size: " + results.count);
             if (results.count > 0) {
                 notiyfyByFilter = true;
                 notifyDataSetChanged();

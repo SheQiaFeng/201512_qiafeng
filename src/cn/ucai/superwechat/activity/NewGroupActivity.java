@@ -214,6 +214,7 @@ public class NewGroupActivity extends BaseActivity {
                 String groupName = groupNameEditText.getText().toString().trim();
                 String desc = introductionEditText.getText().toString();
                 Contact[] contacts = (Contact[]) data.getSerializableExtra("newmembers");
+
                 String[] members = null;
                 String[] memberIds = null;
                 if (contacts != null) {
