@@ -347,7 +347,7 @@ public class NewGroupActivity extends BaseActivity {
                     setResult(RESULT_OK, intent);
                 } else {
                     progressDialog.dismiss();
-
+                    Toast.makeText(mContext,R.string.Failed_to_create_groups,Toast.LENGTH_SHORT).show();
                 }
                 finish();
             }

@@ -38,6 +38,7 @@ public class Group extends Location implements java.io.Serializable {
 	private Integer mgroupAffiliationsCount;
 	private Boolean mgroupIsPublic;
 	private Boolean mgroupAllowInvites;
+	private String header;
 
 	// Constructors
 
@@ -45,6 +46,9 @@ public class Group extends Location implements java.io.Serializable {
 	public Group() {
 	}
 
+	public String getHeader() {
+		return header;
+	}
 	/** minimal constructor */
 	public Group(String MGroupOwner, String MGroupLastModifiedTime,
 			Integer MGroupAffiliationsCount, Boolean MGroupIsPublic,
@@ -155,6 +159,7 @@ public class Group extends Location implements java.io.Serializable {
 	public void setMGroupAllowInvites(Boolean MGroupAllowInvites) {
 		this.mgroupAllowInvites = MGroupAllowInvites;
 	}
+
 
 	@Override
 	public String toString() {
