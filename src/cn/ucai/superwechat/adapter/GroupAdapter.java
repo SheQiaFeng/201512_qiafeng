@@ -66,7 +66,7 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
         mGrouplist = groups;
         Log.i("Login", "GroupAdapter--->onCreate--->mGroupList=" + mGrouplist);
         mCopyGroupList = new ArrayList<Group>();
-        mCopyGroupList.addAll(groups);
+        mCopyGroupList.addAll(mGrouplist);
     }
 
     @Override
@@ -235,10 +235,14 @@ public class GroupAdapter extends BaseAdapter implements SectionIndexer {
                 for (int i = 0; i < count; i++) {
                     final Group group = mOriginalList.get(i);
                     String username = group.getMGroupName();
-                    String id = group.getMGroupHxid();
+                    String nick = UserUtils.getPinYinFromHanZi(group.getMGroupName());
+                    String id = UserUtils.getPinYinFromHanZi(group.getMGroupHxid());
+
+
                     if (username.contains(prefixString)||username.startsWith(prefixString)||id.contains(prefix)) {
                         newValues.add(group);
-                    } else {
+                    }
+                    else {
                         final String[] words = username.split(" ");
                         final int wordCount = words.length;
 

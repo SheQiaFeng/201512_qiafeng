@@ -46,6 +46,10 @@ public class Group extends Location implements java.io.Serializable {
 	public Group() {
 	}
 
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
 	public String getHeader() {
 		return header;
 	}
