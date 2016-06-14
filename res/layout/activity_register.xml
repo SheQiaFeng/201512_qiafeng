@@ -6,33 +6,43 @@
     android:orientation="vertical"
     android:id="@+id/layout_register">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_press"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="账户注册"
+                android:textColor="#030303"
+                android:textSize="25dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="10dp"/>
 
-
+        </LinearLayout>
         <ImageView
-            android:layout_marginLeft="100dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/aaaa"
-            android:layout_toLeftOf="@+id/title"/>
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dip"
-            android:text="超级微信"
-            android:textColor="#ea0202"
-            android:textSize="30sp" />
-    </RelativeLayout>
+            android:layout_marginTop="10dp"
+            android:layout_width="500dp"
+            android:layout_height="1dp"
+            android:background="#8c8c8c"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_weight="1.5"
@@ -193,21 +203,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal" >
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"
-                android:background="#fff"
 
-                android:paddingBottom="7dp"
-                android:paddingTop="7dp"
-                android:text="login"
-                android:textColor="#1e1d1d"
-                android:textSize="20sp"
-                android:layout_weight="1.5"/>
             <Button
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
@@ -215,15 +211,13 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/button_login_bg"
-
+                android:background="#fd5202"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:text="@string/register"
+                android:text="免费注册"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:layout_weight="1"/>
-
         </LinearLayout>
 
     </LinearLayout>
