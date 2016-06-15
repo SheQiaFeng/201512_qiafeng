@@ -50,7 +50,7 @@ import cn.ucai.fulicenter.utils.Utils;
 
 import com.squareup.picasso.Picasso;
 
-public class UserProfileActivity extends BaseActivity implements OnClickListener {
+public class  UserProfileActivity extends BaseActivity implements OnClickListener {
     private static final String TAG = UserProfileActivity.class.getName();
     private static final int REQUESTCODE_PICK = 1;
     private static final int REQUESTCODE_CUTTING = 2;

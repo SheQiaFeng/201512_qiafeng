@@ -13,12 +13,6 @@
  */
 package cn.ucai.fulicenter.activity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,46 +37,41 @@ import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.EMEventListener;
-import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
-
-import cn.ucai.fulicenter.I;
-import cn.ucai.fulicenter.SuperWeChatApplication;
-import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
-
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.util.EMLog;
+import com.easemob.util.HanziToPinyin;
+import com.easemob.util.NetUtils;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.Contact;
 import cn.ucai.fulicenter.data.ApiParams;
 import cn.ucai.fulicenter.data.GsonRequest;
-import cn.ucai.fulicenter.db.InviteMessgeDao;
 import cn.ucai.fulicenter.db.EMUserDao;
+import cn.ucai.fulicenter.db.InviteMessgeDao;
 import cn.ucai.fulicenter.domain.EMUser;
 import cn.ucai.fulicenter.domain.InviteMessage;
 import cn.ucai.fulicenter.domain.InviteMessage.InviteMesageStatus;
 import cn.ucai.fulicenter.fragment.ChatAllHistoryFragment;
 import cn.ucai.fulicenter.fragment.ContactlistFragment;
 import cn.ucai.fulicenter.fragment.SettingsFragment;
-import cn.ucai.fulicenter.utils.CommonUtils;
-
-import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
-import com.easemob.util.NetUtils;
-import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
     Activity mContext;

@@ -94,17 +94,20 @@ public class SplashActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     }
-                    //进入主页面
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
+//                    //进入主页面
+//                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//                    finish();
                 } else {
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                    finish();
+//                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+//                    finish();
                 }
+               // 进入主页面
+                    startActivity(new Intent(SplashActivity.this, FuliCenterMain2Activity.class));
+                    finish();
             }
         }).start();
 
