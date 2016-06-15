@@ -21,7 +21,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/layout_new_group"
+                android:id="@+id/layout_new_good"
                 style="@style/menu_item_style"
                 android:button="@null"
                 android:checked="false"
@@ -50,25 +50,24 @@
             <RelativeLayout
                 style="@style/menu_item_style"
                 >
-
                 <RadioButton
                     android:id="@+id/layout_cart"
-                    style="@style/menu_item_style"
+                    android:drawableTop="@drawable/selector_menu_item_cart"
+                    style="@style/menu_item_style_cart"
+                    android:text="购物车"
+                    android:textColor="@color/main_botton_text_color"
                     android:button="@null"
                     android:checked="false"
-                    android:drawableTop="@drawable/selector_menu_item_cart"
-                    android:text="购物车"
-                    android:textColor="@color/main_botton_text_color" />
-
+                    />
                 <LinearLayout
                     android:id="@+id/shopping_cart_num_bg"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="3dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
                     <TextView
@@ -84,8 +83,11 @@
                         android:textColor="#fff"
                         android:textSize="12dp"
                         android:visibility="gone"/>
+
                 </LinearLayout>
+
             </RelativeLayout>
+
             <RadioButton
                 android:id="@+id/layout_personal_center"
                 style="@style/menu_item_style"
@@ -95,7 +97,11 @@
                 android:text="我"
                 android:textColor="@color/main_botton_text_color" />
         </RadioGroup>
-
     </LinearLayout>
-
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_above="@id/main_bottom"/>
+    </RelativeLayout>
