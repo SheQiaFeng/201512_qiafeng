@@ -6,23 +6,22 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import cn.ucai.fulicenter.Constant;
-import cn.ucai.fulicenter.I;
-import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
-import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
-import cn.ucai.fulicenter.DemoHXSDKHelper;
-import cn.ucai.fulicenter.bean.Contact;
-import cn.ucai.fulicenter.bean.Group;
-import cn.ucai.fulicenter.bean.User;
-import cn.ucai.fulicenter.data.RequestManager;
-import cn.ucai.fulicenter.domain.EMUser;
-
 import com.android.volley.toolbox.NetworkImageView;
 import com.easemob.util.HanziToPinyin;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import cn.ucai.fulicenter.Constant;
+import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.I;
+import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
+import cn.ucai.fulicenter.bean.Contact;
+import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.data.RequestManager;
+import cn.ucai.fulicenter.domain.EMUser;
 
 public class UserUtils {
     public static final String TAG = "UserUtils";
@@ -67,17 +66,6 @@ public class UserUtils {
         }
     }
 
-    public static Group getGroupBeanFromHXID(String hxid) {
-        if (hxid != null && !hxid.isEmpty()) {
-            ArrayList<Group> groupArrayList = SuperWeChatApplication.getInstance().getGroupList();
-            for (Group group : groupArrayList) {
-                if (group.getMGroupHxid().equals(hxid)) {
-                    return group;
-                }
-            }
-        }
-        return null;
-    }
 
 
 

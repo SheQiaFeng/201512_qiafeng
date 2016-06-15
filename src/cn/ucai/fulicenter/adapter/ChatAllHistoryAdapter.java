@@ -44,7 +44,6 @@ import com.easemob.chat.EMConversation.EMConversationType;
 import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.bean.Group;
 import cn.ucai.fulicenter.domain.RobotUser;
 import cn.ucai.fulicenter.utils.DateUtils;
 import cn.ucai.fulicenter.utils.SmileUtils;
@@ -99,37 +98,25 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 		EMConversation conversation = getItem(position);
 		// 获取用户username或者群组groupid
 		String username = conversation.getUserName();
-		if (conversation.getType() == EMConversationType.GroupChat) {
-			// 群聊消息，显示群聊头像
-			UserUtils.setGroupBeanAvatar(username,holder.avatar);
-			//holder.avatar.setImageResource(R.drawable.group_icon);
-			Group group = UserUtils.getGroupBeanFromHXID(username);
-//			EMGroup group = EMGroupManager.getInstance().getGroup(username);
-			holder.name.setText(group != null ? group.getMGroupName() : username);
-		} else if(conversation.getType() == EMConversationType.ChatRoom){
-		    holder.avatar.setImageResource(R.drawable.group_icon);
-            EMChatRoom room = EMChatManager.getInstance().getChatRoom(username);
-            holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
-		}else {
-		    UserUtils.setUserBeanAvatar(username, holder.avatar);
-			if (username.equals(Constant.GROUP_USERNAME)) {
-				holder.name.setText("群聊");
+		UserUtils.setUserBeanAvatar(username, holder.avatar);
+		if (username.equals(Constant.GROUP_USERNAME)) {
+			holder.name.setText("群聊");
 
-			} else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-				holder.name.setText("申请与通知");
-			}
-			Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
-			if(robotMap!=null&&robotMap.containsKey(username)){
-				String nick = robotMap.get(username).getNick();
-				if(!TextUtils.isEmpty(nick)){
-					holder.name.setText(nick);
-				}else{
-					holder.name.setText(username);
-				}
-			}else{
-				UserUtils.setUserBeanNick(username, holder.name);
-			}
+		} else if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
+			holder.name.setText("申请与通知");
 		}
+		Map<String, RobotUser> robotMap = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getRobotList();
+		if (robotMap != null && robotMap.containsKey(username)) {
+			String nick = robotMap.get(username).getNick();
+			if (!TextUtils.isEmpty(nick)) {
+				holder.name.setText(nick);
+			} else {
+				holder.name.setText(username);
+			}
+		} else {
+			UserUtils.setUserBeanNick(username, holder.name);
+		}
+
 
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数

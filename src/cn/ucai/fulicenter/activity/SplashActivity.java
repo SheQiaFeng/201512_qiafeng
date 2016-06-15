@@ -9,20 +9,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
-import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.SuperWeChatApplication;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.db.UserDao;
-import cn.ucai.fulicenter.task.DownloadAllGroupTask;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
-import cn.ucai.fulicenter.task.DownloadPublicGroupTask;
 
 /**
  * 开屏页
@@ -58,9 +54,6 @@ public class SplashActivity extends BaseActivity {
             instance.setPassword(user.getMUserPassword());
             SuperWeChatApplication.currentUserNick = user.getMUserNick();
             new DownloadContactListTask(mContext,user.getMUserName());//下载联系人
-            new DownloadAllGroupTask(mContext,user.getMUserName());
-            new DownloadPublicGroupTask(mContext,user.getMUserName()
-                    ,I.PAGE_ID_DEFAULT,I.PAGE_SIZE_DEFAULT);
 
         }
 
@@ -80,9 +73,7 @@ public class SplashActivity extends BaseActivity {
                 Log.i("main","----------------11111111111111-------------"+user);
                 SuperWeChatApplication.currentUserNick = user.getMUserNick();
                 new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
-                new DownloadAllGroupTask(SplashActivity.this, user.getMUserName()).execute();
-                new DownloadPublicGroupTask(SplashActivity.this, user.getMUserName(), I.PAGE_ID_DEFAULT, I.PAGE_SIZE_DEFAULT).execute();
-            }
+             }
 
         }
         new Thread(new Runnable() {
