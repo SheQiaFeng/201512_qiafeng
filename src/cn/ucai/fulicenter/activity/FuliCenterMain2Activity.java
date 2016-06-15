@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
 
-public class FuliCenterMain2Activity extends Activity {
+public class FuliCenterMain2Activity extends BaseActivity {
     TextView mTvCartHint;
     RadioButton mRadioNewGood;
     RadioButton mRadioBoutique;
