@@ -57,7 +57,7 @@ import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.activity.AddContactActivity;
 import cn.ucai.fulicenter.activity.ChatActivity;
 import cn.ucai.fulicenter.activity.MainActivity;
@@ -338,7 +338,7 @@ public class ContactlistFragment extends Fragment {
 
         try {
             String path=new ApiParams()
-                    .with(I.Contact.USER_NAME,SuperWeChatApplication.getInstance().getUserName())
+                    .with(I.Contact.USER_NAME, FuLiCenterApplication.getInstance().getUserName())
                     .with(I.Contact.CU_NAME,tobeDeleteEMUser.getMContactCname())
                     .getRequestUrl(I.REQUEST_DELETE_CONTACT);
             ((MainActivity)getActivity()).executeRequest(new GsonRequest<Boolean>(path,
@@ -384,8 +384,8 @@ public class ContactlistFragment extends Fragment {
             @Override
             public void onResponse(Boolean response) {
                 if (response){
-                    SuperWeChatApplication.getInstance().getUserList().remove(tobeDeleteEMUser.getMContactCname());
-                    SuperWeChatApplication.getInstance().getContactList().remove(tobeDeleteEMUser);
+                    FuLiCenterApplication.getInstance().getUserList().remove(tobeDeleteEMUser.getMContactCname());
+                    FuLiCenterApplication.getInstance().getContactList().remove(tobeDeleteEMUser);
                     getActivity().sendStickyBroadcast(new Intent("update_contact_list"));
                 }
             }
@@ -481,7 +481,7 @@ public class ContactlistFragment extends Fragment {
     private void getContactList() {
         mContactList.clear();
         //获取本地好友列表
-        ArrayList<Contact> contactList = SuperWeChatApplication.getInstance().getContactList();
+        ArrayList<Contact> contactList = FuLiCenterApplication.getInstance().getContactList();
         mContactList.addAll(contactList);
         //添加群聊
         Contact groupUser = new Contact();

@@ -16,10 +16,16 @@ package cn.ucai.fulicenter.utils;
 import android.content.Context;
 import android.os.Environment;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 
 import java.io.File;
+
+import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.I;
+import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.data.RequestManager;
 
 public class ImageUtils {
 //	public static String getThumbnailImagePath(String imagePath) {
@@ -62,5 +68,11 @@ public class ImageUtils {
 		}
 		return folder.getAbsolutePath();
 	}
-	
+
+	public static void setNewGoodThumb(String goodsThumb, NetworkImageView nivThumb) {
+		String path = I.DOWNLOAD_BOUTIQUE_IMG_URL + goodsThumb;
+		nivThumb.setImageUrl(path, RequestManager.getImageLoader());
+		nivThumb.setErrorImageResId(R.drawable.nopic);
+		nivThumb.setDefaultImageResId(R.drawable.nopic);
+	}
 }

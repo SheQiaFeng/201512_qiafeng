@@ -47,7 +47,7 @@ import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.data.ApiParams;
@@ -96,8 +96,8 @@ public class LoginActivity extends BaseActivity {
 
         // 如果用户名改变，清空密码
 
-        if (SuperWeChatApplication.getInstance().getUserName() != null) {
-            usernameEditText.setText(SuperWeChatApplication.getInstance().getUserName());
+        if (FuLiCenterApplication.getInstance().getUserName() != null) {
+            usernameEditText.setText(FuLiCenterApplication.getInstance().getUserName());
         }
         setListener();
     }
@@ -235,12 +235,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void saveUser(User user) {
-        SuperWeChatApplication instance = SuperWeChatApplication.getInstance();
+        FuLiCenterApplication instance = FuLiCenterApplication.getInstance();
         instance.setUser(user);
         // 登陆成功，保存用户名密码
         instance.setUserName(user.getMUserName());
         instance.setPassword(user.getMUserPassword());
-        SuperWeChatApplication.currentUserNick = user.getMUserNick();
+        FuLiCenterApplication.currentUserNick = user.getMUserNick();
 
     }
 
@@ -254,7 +254,7 @@ public class LoginActivity extends BaseActivity {
             initializeContacts();
             //下载用户头像到SD卡里面
             final OkHttpUtils<Message> utils = new OkHttpUtils<Message>();
-            utils.url(SuperWeChatApplication.SERVER_ROOT)//设置地址
+            utils.url(FuLiCenterApplication.SERVER_ROOT)//设置地址
                     .addParam(I.KEY_REQUEST, I.REQUEST_DOWNLOAD_AVATAR)//添加参数
                     .addParam(I.AVATAR_TYPE, currentUsername)//添加用户账号
                     .doInBackground(new Callback() {
@@ -299,7 +299,7 @@ public class LoginActivity extends BaseActivity {
         }
         // 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
         boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-                SuperWeChatApplication.currentUserNick.trim());
+                FuLiCenterApplication.currentUserNick.trim());
         if (!updatenick) {
             Log.e("LoginActivity", "update current user nick fail");
         }

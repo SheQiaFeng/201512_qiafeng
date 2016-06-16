@@ -35,7 +35,7 @@ import com.easemob.chat.EMContactManager;
 
 import java.util.HashMap;
 
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.Contact;
@@ -92,7 +92,7 @@ public class AddContactActivity extends BaseActivity {
             return;
         }
         //判断不能添加自己
-        if (SuperWeChatApplication.getInstance().getUserName().equals(name.trim()) ){//trim去掉首位的空格，不包括中间的空格
+        if (FuLiCenterApplication.getInstance().getUserName().equals(name.trim()) ){//trim去掉首位的空格，不包括中间的空格
             String str = getString(R.string.not_add_myself);
             startActivity(new Intent(this, AlertDialog.class).putExtra("msg", str));
             return;
@@ -121,7 +121,7 @@ public class AddContactActivity extends BaseActivity {
             @Override
             public void onResponse(User user) {
                 if (user != null) {
-                    HashMap<String, Contact> userList = SuperWeChatApplication.getInstance().getUserList();
+                    HashMap<String, Contact> userList = FuLiCenterApplication.getInstance().getUserList();
                     if (userList.containsKey(user.getMUserName())) {
                         startActivity(new Intent(AddContactActivity.this,UserProfileActivity.class)//如果是好友，就跳转到详细页面
                         .putExtra("username",user.getMUserName()));
@@ -149,7 +149,7 @@ public class AddContactActivity extends BaseActivity {
      * @param view
      */
     public void addContact(View view) {
-        if (SuperWeChatApplication.getInstance().getUserName().equals(nameText.getText().toString())) {
+        if (FuLiCenterApplication.getInstance().getUserName().equals(nameText.getText().toString())) {
             String str = getString(R.string.not_add_myself);
             startActivity(new Intent(this, AlertDialog.class).putExtra("msg", str));
             return;

@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class NewGoodFragment extends Fragment {
     RecyclerView mRecyrlerView;
     TextView mtvHint;
     GridLayoutManager mGridLayoutManager;
+
     // int pageSize = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,18 +61,19 @@ public class NewGoodFragment extends Fragment {
         setPullUpRefreshListener();
     }
 
-
+    //上拉加载
     private void setPullUpRefreshListener() {
 
         mRecyrlerView.setOnScrollListener(
-                new RecyclerView.OnScrollListener(){
+                new RecyclerView.OnScrollListener() {
                     int lastItemPosition;
+
                     @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView,int newState){
-                        super.onScrollStateChanged(recyclerView,newState);
-                        if (newState==RecyclerView.SCROLL_STATE_IDLE&&
-                                lastItemPosition==mAdapter.getItemCount()-1){
-                            if (mAdapter.isMore()){
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                                lastItemPosition == mAdapter.getItemCount() - 1) {
+                            if (mAdapter.isMore()) {
                                 mSwipeRefreshLayout.setRefreshing(true);
                                 action = I.ACTION_PULL_UP;
                                 pageId += I.PAGE_SIZE_DEFAULT;
@@ -101,8 +104,8 @@ public class NewGoodFragment extends Fragment {
     */
     private void setPullDownRefreshListener() {
         mSwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener(){
-                    public void onRefresh(){
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    public void onRefresh() {
                         mtvHint.setVisibility(View.VISIBLE);
                         pageId = 0;
                         action = I.ACTION_PULL_DOWN;
@@ -114,6 +117,7 @@ public class NewGoodFragment extends Fragment {
                 }
         );
     }
+
     private void initData() {
         try {
             getPath(pageId);
@@ -127,11 +131,12 @@ public class NewGoodFragment extends Fragment {
 
     private String getPath(int pageId) {
         try {
-             path = new ApiParams()
+            path = new ApiParams()
                     .with(I.NewAndBoutiqueGood.CAT_ID, I.CAT_ID + "")
                     .with(I.PAGE_ID, pageId + "")
                     .with(I.PAGE_SIZE, I.PAGE_SIZE_DEFAULT + "")
                     .getRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS);
+            Log.e("color", "++++:" + path);
             return path;
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,8 +160,7 @@ public class NewGoodFragment extends Fragment {
                     ArrayList<NewGoodBean> list = Utils.array2List(newGoodBeen);
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
                         mAdapter.initItems(list);
-
-                    } else if (action==I.ACTION_PULL_UP){
+                    } else if (action == I.ACTION_PULL_UP) {
                         mAdapter.addItems(list);
                     }
                     if (newGoodBeen.length < I.PAGE_SIZE_DEFAULT) {
@@ -172,10 +176,10 @@ public class NewGoodFragment extends Fragment {
     private void initView(View layout) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.sfl_newgood);
         mSwipeRefreshLayout.setColorSchemeColors(
-                R.color.google_blue,
-                R.color.google_green,
-                R.color.google_red,
-                R.color.google_yellow
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow)
         );
         mtvHint = (TextView) layout.findViewById(R.id.tv_refresh_hint);
         mGridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);

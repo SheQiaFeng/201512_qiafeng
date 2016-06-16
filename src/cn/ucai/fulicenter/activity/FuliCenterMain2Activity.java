@@ -2,6 +2,8 @@ package cn.ucai.fulicenter.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -9,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.fragment.NewGoodFragment;
 
 public class FuliCenterMain2Activity extends BaseActivity {
     TextView mTvCartHint;
@@ -18,6 +21,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
     RadioButton mRadioCart;
     RadioButton mRadioPersonalCenter;
     RadioButton[] mRadios = new RadioButton[5];
+    NewGoodFragment mNewGoodFragment;
+    Fragment[] mFragments = new Fragment[1];
     private int index;
     private int currentTabIndex;
 
@@ -27,6 +32,20 @@ public class FuliCenterMain2Activity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuli_center_main2);
         initView();
+        initFragment();
+        // 添加显示第一个fragment
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, mNewGoodFragment)
+                //.add(R.id.fragment_container, contactListFragment)
+              //  .hide(contactListFragment)
+                .show(mNewGoodFragment)
+                .commit();
+    }
+
+    private void initFragment() {
+        mNewGoodFragment = new NewGoodFragment();
+
     }
 
     private void initView() {
@@ -64,19 +83,23 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 break;
         }
         if (currentTabIndex != index) {
+            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+            trx.hide(mFragments[currentTabIndex]);
+            if (!mFragments[index].isAdded()) {
+                trx.add(R.id.fragment_container, mFragments[index]);
+            }
+
+            trx.show(mFragments[index]).commit();
             setRadioChecked(index);
             currentTabIndex = index;
         }
     }
-
     private  void setRadioChecked(int index){
         for (int i=0;i<mRadios.length;i++) {
             if (i == index) {
                 mRadios[i].setChecked(true);
-                Log.e("color", "++++++" + index);
             } else {
                 mRadios[i].setChecked(false);
-                Log.e("color", "-------" + i);
             }
         }
     }

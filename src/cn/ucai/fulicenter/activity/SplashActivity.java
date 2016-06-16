@@ -15,7 +15,7 @@ import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
@@ -46,13 +46,13 @@ public class SplashActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         if (DemoHXSDKHelper.getInstance().isLogined()){
-            User user = SuperWeChatApplication.getInstance().getUser();
-            SuperWeChatApplication instance = SuperWeChatApplication.getInstance();
+            User user = FuLiCenterApplication.getInstance().getUser();
+            FuLiCenterApplication instance = FuLiCenterApplication.getInstance();
             instance.setUser(user);
             // 登陆成功，保存用户名密码
             instance.setUserName(user.getMUserName());
             instance.setPassword(user.getMUserPassword());
-            SuperWeChatApplication.currentUserNick = user.getMUserNick();
+            FuLiCenterApplication.currentUserNick = user.getMUserNick();
             new DownloadContactListTask(mContext,user.getMUserName());//下载联系人
 
         }
@@ -62,16 +62,16 @@ public class SplashActivity extends BaseActivity {
 
         if (DemoHXSDKHelper.getInstance().isLogined()) {
            // Log.i("main","-----------------------------");
-            String username = SuperWeChatApplication.getInstance().getUserName();
+            String username = FuLiCenterApplication.getInstance().getUserName();
             UserDao dao = new UserDao(SplashActivity.this);
             User user=dao.findUserByUserName(username);
-            SuperWeChatApplication.getInstance().setUser(user);
+            FuLiCenterApplication.getInstance().setUser(user);
            // Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
            // Log.i("main","----------------11111111111111-------------");
             //登录成功
             if(user!=null){
                 Log.i("main","----------------11111111111111-------------"+user);
-                SuperWeChatApplication.currentUserNick = user.getMUserNick();
+                FuLiCenterApplication.currentUserNick = user.getMUserNick();
                 new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
              }
 
