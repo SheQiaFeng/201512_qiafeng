@@ -51,7 +51,7 @@ public class NewGoodFragment extends Fragment {
         initView(layout);
         setListener();
         initData();
-        mAdapter = new GoodAdapter(mContext, mGoodList);
+        mAdapter = new GoodAdapter(mContext, mGoodList,I.SORT_BY_ADDTIME_DESC);
         return layout;
 
     }
@@ -187,7 +187,7 @@ public class NewGoodFragment extends Fragment {
         mRecyrlerView = (RecyclerView) layout.findViewById(R.id.rv_newgood);
         mRecyrlerView.setHasFixedSize(true);
         mRecyrlerView.setLayoutManager(mGridLayoutManager);
-        mAdapter = new GoodAdapter(mContext, mGoodList);
+        mAdapter = new GoodAdapter(mContext, mGoodList,I.SORT_BY_ADDTIME_DESC);
         mRecyrlerView.setAdapter(mAdapter);
     }
 }

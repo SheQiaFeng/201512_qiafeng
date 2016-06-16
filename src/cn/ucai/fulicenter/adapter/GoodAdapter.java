@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
@@ -28,6 +30,56 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     FooterViewHolder footerHolder;
     private String footerText;
     private boolean isMore;
+    int sortBy;
+
+    public int getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        sort(sortBy);
+        notifyDataSetChanged();
+    }
+
+    private void sort(final int sortBy) {
+        Collections.sort(mGoodList, new Comparator<NewGoodBean>() {
+            @Override
+            public int compare(NewGoodBean g1, NewGoodBean g2) {
+                int result=0;
+                switch (sortBy){
+                    case  I.SORT_BY_ADDTIME_ASC:
+                        result = (int) (g1.getAddTime() - g2.getAddTime());
+                        break;
+                    case  I.SORT_BY_ADDTIME_DESC:
+                        result = (int) (g2.getAddTime() - g1.getAddTime());
+                        break;
+                    case  I.SORT_BY_PRICE_ASC:
+                    {
+                        int p1 = convertPrice(g1.getCurrencyPrice());
+                        int p2 = convertPrice(g2.getCurrencyPrice());
+                        result = p1 - p2;
+
+                    }
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                    {
+                        int p1 = convertPrice(g1.getCurrencyPrice());
+                        int p2 = convertPrice(g2.getCurrencyPrice());
+                        result = p2 - p1;
+                    }
+                    break;
+                }
+                return result;
+            }
+
+            private int convertPrice(String price) {
+                price = price.substring(price.indexOf("￥") + 1);
+                int p1 = Integer.parseInt(price);
+                return p1;
+            }
+        });
+    }
 
     public void setFooterText(String footerText) {
         this.footerText = footerText;
@@ -42,9 +94,10 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         isMore = more;
     }
 
-    public GoodAdapter(Context mContext, ArrayList<NewGoodBean> mGoodList) {
+    public GoodAdapter(Context mContext, ArrayList<NewGoodBean> mGoodList,int sortBy) {
         this.mContext = mContext;
         this.mGoodList = mGoodList;
+        this.sortBy = sortBy;
     }
 
     @Override
@@ -98,11 +151,13 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mGoodList.clear();
         }
         mGoodList.addAll(list);
+        sort(sortBy);
         notifyDataSetChanged();
     }
 
     public void addItems(ArrayList<NewGoodBean> list) {
         mGoodList.addAll(list);
+        sort(sortBy);
         notifyDataSetChanged();
 
     }
