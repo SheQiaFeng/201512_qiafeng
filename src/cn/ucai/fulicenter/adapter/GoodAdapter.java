@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.activity.GoodDetailActivity;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.widget.RecyclingImageView;
@@ -129,6 +132,13 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             goodHolder.tvGoodPrice.setText(good.getCurrencyPrice());
             ImageUtils.setNewGoodThumb(good.getGoodsThumb(), goodHolder.nivThumb);
 
+            goodHolder.layoutGood.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(new Intent(mContext, GoodDetailActivity.class)
+                            .putExtra(D.NewGood.KEY_GOODS_ID,good.getGoodsId());
+                }
+            });
         }
     }
 
