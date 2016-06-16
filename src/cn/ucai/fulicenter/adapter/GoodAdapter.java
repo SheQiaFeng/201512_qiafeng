@@ -32,14 +32,16 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.footerText = footerText;
         notifyDataSetChanged();
     }
-    public boolean isMore(){
+
+    public boolean isMore() {
         return isMore;
     }
-    public void setMore(boolean more){
+
+    public void setMore(boolean more) {
         isMore = more;
     }
 
-    public GoodAdapter(Context mContext,ArrayList<NewGoodBean> mGoodList) {
+    public GoodAdapter(Context mContext, ArrayList<NewGoodBean> mGoodList) {
         this.mContext = mContext;
         this.mGoodList = mGoodList;
     }
@@ -79,41 +81,44 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemCount() {
         return mGoodList == null ? 1 : mGoodList.size() + 1;
     }
-   @Override
+
+    @Override
     public int getItemViewType(int position) {
-       if (position == getItemCount() - 1) {
-           return I.TYPE_FOOTER;
-       } else {
-           return I.TYPE_ITEM;
-       }
+        if (position == getItemCount() - 1) {
+            return I.TYPE_FOOTER;
+        } else {
+            return I.TYPE_ITEM;
+        }
     }
 
-    public void initList(ArrayList<NewGoodBean> list) {
-        if (mGoodList != null)
+    public void initItems(ArrayList<NewGoodBean> list) {
+        if (mGoodList != null && !mGoodList.isEmpty()) {
             mGoodList.clear();
-            mGoodList.addAll(list);
-
-    }
-    public void addItem(ArrayList<NewGoodBean> list) {
-        for (NewGoodBean ng : list) {
-            if (!mGoodList.contains(ng)) {
-                mGoodList.add(ng);
-            }
         }
+        mGoodList.addAll(list);
+        notifyDataSetChanged();
     }
 
-    class GoodItemViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout layoutGood;
-        NetworkImageView nivThumb;
-        TextView tvGoodName;
-        TextView tvGoodPrice;
+    public void addItems(ArrayList<NewGoodBean> list) {
+        mGoodList.addAll(list);
+        notifyDataSetChanged();
 
-        public GoodItemViewHolder(View itemView) {
-            super(itemView);
-            layoutGood = (LinearLayout) itemView.findViewById(R.id.layout_good);
-            nivThumb = (NetworkImageView) itemView.findViewById(R.id.niv_good_thumb);
-            tvGoodName = (TextView) itemView.findViewById(R.id.tv_good_name);
-            tvGoodPrice = (TextView) itemView.findViewById(R.id.tv_good_price);
-        }
     }
 }
+
+
+class GoodItemViewHolder extends RecyclerView.ViewHolder {
+    LinearLayout layoutGood;
+    NetworkImageView nivThumb;
+    TextView tvGoodName;
+    TextView tvGoodPrice;
+
+    public GoodItemViewHolder(View itemView) {
+        super(itemView);
+        layoutGood = (LinearLayout) itemView.findViewById(R.id.layout_good);
+        nivThumb = (NetworkImageView) itemView.findViewById(R.id.niv_good_thumb);
+        tvGoodName = (TextView) itemView.findViewById(R.id.tv_good_name);
+        tvGoodPrice = (TextView) itemView.findViewById(R.id.tv_good_price);
+    }
+}
+

@@ -375,6 +375,7 @@
     <string name="title_activity_pay_pal_un_synced_list">PayPalUnSyncedListActivity</string>
     <string name="share">share</string>
     <string name="user_qrcode">user qrcode</string>
-
+    <string name="load_more">load more</string>
+    <string name="no_more">no more data!</string>
 
 </resources>
