@@ -8,13 +8,21 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
 
+import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.data.ApiParams;
+import cn.ucai.fulicenter.data.GsonRequest;
 import cn.ucai.fulicenter.utils.ImageUtils;
+import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.view.DisplayUtils;
 
 
 /**
@@ -49,42 +57,42 @@ public class GoodDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_good_details);
         mContext = this;
         initView();
-//        initData();
+       initData();
     }
 
-//    private void initData() {
-//        int goodId=getIntent().getIntExtra(D.NewGood.KEY_GOODS_ID,0);
-//        try {
-//            String path = new ApiParams()
-//                    .with(D.NewGood.KEY_GOODS_ID, goodId + "")
-//                    .getRequestUrl(I.REQUEST_FIND_GOOD_DETAILS);
-//            executeRequest(new GsonRequest<GoodDetailsBean>(path, GoodDetailsBean.class,
-//                    responseDownloadGoodDetailsListener(),errorListener()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private Response.Listener<GoodDetailsBean> responseDownloadGoodDetailsListener() {
-//        return new Response.Listener<GoodDetailsBean>() {
-//            @Override
-//            public void onResponse(GoodDetailsBean goodDetailsBean) {
-//                if (goodDetailsBean != null) {
-//                    mGood = goodDetailsBean;
-//                    //设置商品名称，价格，webVIEW的简介
-//                    DisplayUtils.initBackWithTitle(GoodDetailActivity.this, getResources().getString(R.string.title_good_details));
-//                    tvCurrencyPrice.setText(mGood.getCurrencyPrice());
-//                    tvGoodEnglishName.setText(mGood.getGoodsEnglishName());
-//                    tvGoodName.setText(mGood.getGoodsName());
-//                    wvGoodBrief.loadDataWithBaseURL(null, mGood.getGoodsBrief().trim(), D.TEXT_HTML, D.UTF_8, null);
-//                    initColorBanner();
-//                } else {
-//                    Utils.showToast(mContext,"商品详情下载失败", Toast.LENGTH_SHORT);
-//                    finish();
-//                }
-//            }
-//        };
-//    }
+  private void initData() {
+        int goodId=getIntent().getIntExtra(D.NewGood.KEY_GOODS_ID,0);
+        try {
+            String path = new ApiParams()
+                    .with(D.NewGood.KEY_GOODS_ID, goodId + "")
+                    .getRequestUrl(I.REQUEST_FIND_GOOD_DETAILS);
+            executeRequest(new GsonRequest<GoodDetailsBean>(path, GoodDetailsBean.class,
+                    responseDownloadGoodDetailsListener(),errorListener()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+   private Response.Listener<GoodDetailsBean> responseDownloadGoodDetailsListener() {
+        return new Response.Listener<GoodDetailsBean>() {
+            @Override
+            public void onResponse(GoodDetailsBean goodDetailsBean) {
+                if (goodDetailsBean != null) {
+                    mGood = goodDetailsBean;
+                   //设置商品名称，价格，webVIEW的简介
+                    DisplayUtils.initBackWithTitle(GoodDetailActivity.this, getResources().getString(R.string.title_good_details));
+                 tvCurrencyPrice.setText(mGood.getCurrencyPrice());
+                   tvGoodEnglishName.setText(mGood.getGoodsEnglishName());
+                  tvGoodName.setText(mGood.getGoodsName());
+                  wvGoodBrief.loadDataWithBaseURL(null, mGood.getGoodsBrief().trim(), D.TEXT_HTML, D.UTF_8, null);
+                  initColorBanner();
+              } else {
+                 Utils.showToast(mContext,"商品详情下载失败", Toast.LENGTH_SHORT);
+                    finish();
+              }
+           }
+        };
+   }
 
     private void initColorBanner() {
         updateColor(0);

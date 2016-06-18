@@ -102,6 +102,11 @@
             android:layout_below="@id/tvCurrencyPrice"
             android:layout_marginTop="25dp">
 
+            <cn.ucai.fulicenter.view.SlideAutoLoopView
+                android:id="@+id/salv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/good_detail_bg_white" />
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/layoutColor"
