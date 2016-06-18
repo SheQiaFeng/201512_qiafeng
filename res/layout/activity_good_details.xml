@@ -12,7 +12,7 @@
         android:layout_height="35dp"
         android:background="@color/good_detail_title_bg">
 
-        <include layout="@layout/commom_head_title" />
+        <include layout="@layout/common_head_title" />
 
         <ImageView
             android:id="@+id/ivShare"
@@ -101,23 +101,7 @@
             android:layout_height="190dp"
             android:layout_below="@id/tvCurrencyPrice"
             android:layout_marginTop="25dp">
-            <cn.ucai.fulicenter.view.SlideAutoLoopView
-                android:id="@+id/salv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/good_detail_bg_white"
-                />
-            <cn.ucai.fulicenter.view.FlowIndicator
-                android:id="@+id/indicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                app:count="4"
-                app:focus="0"
-                app:foces_color="@color/good_detaul_flow_indicator_focus"
-                app:normal_color="#aldldldl"
-                app:r="5dp"
-                app:space="3dp" />
+
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/layoutColor"

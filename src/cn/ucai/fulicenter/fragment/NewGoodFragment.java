@@ -136,7 +136,6 @@ public class NewGoodFragment extends Fragment {
                     .with(I.PAGE_ID, pageId + "")
                     .with(I.PAGE_SIZE, I.PAGE_SIZE_DEFAULT + "")
                     .getRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS);
-            Log.e("color", "++++:" + path);
             return path;
         } catch (Exception e) {
             e.printStackTrace();

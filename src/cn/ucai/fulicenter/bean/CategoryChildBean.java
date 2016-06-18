@@ -3,10 +3,9 @@ package cn.ucai.fulicenter.bean;
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2016/6/13.
+ * Created by ucai001 on 2016/3/1.
  */
 public class CategoryChildBean implements Serializable {
-
 
     /**
      * id : 348
@@ -20,36 +19,36 @@ public class CategoryChildBean implements Serializable {
     private String name;
     private String imageUrl;
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getParentId() {
-        return parentId;
     }
 
     public void setParentId(int parentId) {
         this.parentId = parentId;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
@@ -62,5 +61,3 @@ public class CategoryChildBean implements Serializable {
                 '}';
     }
 }
-
-

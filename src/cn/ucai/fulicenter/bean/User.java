@@ -1,10 +1,8 @@
 package cn.ucai.fulicenter.bean;
 
 
-import android.os.*;
-
 /**
- * EMUser entity. @author MyEclipse Persistence Tools
+ * User entity. @author MyEclipse Persistence Tools
  */
 public class User extends Message implements java.io.Serializable {
 	private static final long serialVersionUID = 6848921231724157394L;
@@ -14,12 +12,12 @@ public class User extends Message implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private Integer muserId;  //user id
+	private Integer muserId;
 	private String muserName;
 	private String muserPassword;
 	private String muserNick;
 	private Integer muserUnreadMsgCount=0;
-	private  String header;  //名字首字母
+	private String header;
 
 	// Constructors
 
@@ -98,10 +96,10 @@ public class User extends Message implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "EMUser [MUserId=" + muserId + ", MUserName=" + muserName
+		return "User [MUserId=" + muserId + ", MUserName=" + muserName
 				+ ", MUserPassword=" + muserPassword + ", MUserNick="
 				+ muserNick + ", MUserUnreadMsgCount=" + muserUnreadMsgCount
-				+",header="+header+ "]";
+				+ ", header=" + header + "]";
 	}
 
 	@Override
@@ -111,12 +109,12 @@ public class User extends Message implements java.io.Serializable {
 
 		User user = (User) o;
 
-		return muserName.equals(user.muserName);
+		return getMUserName().equals(user.getMUserName());
 
 	}
 
 	@Override
 	public int hashCode() {
-		return muserName.hashCode();
+		return getMUserName().hashCode();
 	}
 }
