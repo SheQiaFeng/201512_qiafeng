@@ -107,6 +107,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/good_detail_bg_white" />
+            <cn.ucai.fulicenter.view.FlowIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:count="4"
+                app:focus="0"
+                app:focus_color="@color/good_detaul_flow_indicator_focus"
+                app:normal_color="#a1d1d1d1"
+                app:r="0dp"
+                app:space="3dp"/>
+
+
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/layoutColor"

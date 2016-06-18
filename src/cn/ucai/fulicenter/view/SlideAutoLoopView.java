@@ -11,10 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.Scroller;
 
+import java.lang.reflect.Field;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
@@ -31,7 +34,7 @@ public class SlideAutoLoopView extends ViewPager {
     /** 自动播放的标识符*/
     final int ACTION_PLAY=1;
     /**定义FlowIndicator:图片指示器view*/
-  //  FlowIndicator mFlowIndicator;
+    FlowIndicator mFlowIndicator;
     /** 轮播图片的适配器*/
     SlideAutoLooopAdapter mAdapter;
     /** 图片数量*/
@@ -81,7 +84,7 @@ public class SlideAutoLoopView extends ViewPager {
             @Override
             public void onPageSelected(int position) {
                 //设置指示器中实心圆的切换
-            //    mFlowIndicator.setFocus(position%mCount);
+                mFlowIndicator.setFocus(position%mCount);
             }
             
             @Override
@@ -189,54 +192,54 @@ public class SlideAutoLoopView extends ViewPager {
     /**
      * 开始图片的轮播
      */
-//    public void startPlayLoop(FlowIndicator flowIndicator, String[] albumImgUrl, int count){
-//        if(mAdapter==null){
-//            mCount=count;
-//            this.mFlowIndicator=flowIndicator;
-//            mFlowIndicator.setCount(count);
-//            mFlowIndicator.setFocus(0);
-//            this.mAlbumImgUrl=albumImgUrl;
-//            mAdapter=new SlideAutoLooopAdapter(mContext, mAlbumImgUrl, count);
-//            this.setAdapter(mAdapter);
-//
-//            try {
-//                Field field = ViewPager.class.getDeclaredField("mScroller");
-//                field.setAccessible(true);
-//                MyScroller scroller=new MyScroller(mContext, new LinearInterpolator());
-//                scroller.setDuration(500);
-//                scroller.startScroll(0, 0, 50, 0);
-//                field.set(this, scroller);
-//            } catch (NoSuchFieldException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IllegalArgumentException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
-//        if(mTimer==null){
-//            mTimer=new Timer();
-//        }
-//        mTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                mHandler.sendEmptyMessage(ACTION_PLAY);
-//            }
-//        }, 1,mDuration);
-//    }
-//
+    public void startPlayLoop(FlowIndicator flowIndicator, String[] albumImgUrl, int count){
+        if(mAdapter==null){
+            mCount=count;
+            this.mFlowIndicator=flowIndicator;
+            mFlowIndicator.setCount(count);
+            mFlowIndicator.setFocus(0);
+            this.mAlbumImgUrl=albumImgUrl;
+            mAdapter=new SlideAutoLooopAdapter(mContext, mAlbumImgUrl, count);
+            this.setAdapter(mAdapter);
+            
+            try {
+                Field field = ViewPager.class.getDeclaredField("mScroller");
+                field.setAccessible(true);
+                MyScroller scroller=new MyScroller(mContext, new LinearInterpolator());
+                scroller.setDuration(500);
+                scroller.startScroll(0, 0, 50, 0);
+                field.set(this, scroller);
+            } catch (NoSuchFieldException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        if(mTimer==null){
+            mTimer=new Timer();
+        }
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mHandler.sendEmptyMessage(ACTION_PLAY);
+            }
+        }, 1,mDuration);
+    }
+    
     /**
      * 停止图片轮播
      */
-//    public void stopPlayLoop(){
-//        if(mTimer!=null){
-//            mTimer.cancel();
-//            mTimer=null;
-//        }
-//    }
+    public void stopPlayLoop(){
+        if(mTimer!=null){
+            mTimer.cancel();
+            mTimer=null;
+        }
+    }
     
     /**
      * ViewPager列表项滚动的距离、时间间隔的设置

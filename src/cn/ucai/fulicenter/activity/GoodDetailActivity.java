@@ -23,6 +23,8 @@ import cn.ucai.fulicenter.data.GsonRequest;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.DisplayUtils;
+import cn.ucai.fulicenter.view.FlowIndicator;
+import cn.ucai.fulicenter.view.SlideAutoLoopView;
 
 
 /**
@@ -32,6 +34,8 @@ public class GoodDetailActivity extends BaseActivity {
     Context mContext;
     GoodDetailsBean mGood;
     int mGoodsId;
+    SlideAutoLoopView mSlideAutoLoopView;
+    FlowIndicator mFlowIndicator;
 
 
    /*  * 显示颜色的容器布局
@@ -123,7 +127,7 @@ public class GoodDetailActivity extends BaseActivity {
             albumImgUrl[j] = albums[j].getImgUrl();
 
         }
-//        mSlideAutoLoopView.startPlayLoop(mFlowIndicator,albumImgUrl,albumImgUrl.length);
+       mSlideAutoLoopView.startPlayLoop(mFlowIndicator,albumImgUrl,albumImgUrl.length);
     }
 
 
@@ -133,8 +137,8 @@ public class GoodDetailActivity extends BaseActivity {
         mivShare = (ImageView) findViewById(R.id.ivShare);
         mtvCartCount = (TextView) findViewById(R.id.tvCartCount);
 //
-//        mSlideAutoLoopView = (SlideAutoLoopView) findViewById(R.id.salv);
-//        mFlowIndicator = (FlowIndicator) findViewById(R.id.indicator);
+        mSlideAutoLoopView = (SlideAutoLoopView) findViewById(R.id.salv);
+       mFlowIndicator = (FlowIndicator) findViewById(R.id.indicator);
         mLayoutColors = (LinearLayout) findViewById(R.id.layoutColorSelector);
         tvCurrencyPrice = (TextView) findViewById(R.id.tvCurrencyPrice);
         tvGoodEnglishName = (TextView) findViewById(R.id.tvGoodEnglishName);
