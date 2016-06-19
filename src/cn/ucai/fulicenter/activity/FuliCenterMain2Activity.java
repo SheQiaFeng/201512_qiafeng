@@ -1,16 +1,14 @@
 package cn.ucai.fulicenter.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.fragment.NewGoodFragment;
 
 public class FuliCenterMain2Activity extends BaseActivity {
@@ -22,7 +20,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
     RadioButton mRadioPersonalCenter;
     RadioButton[] mRadios = new RadioButton[5];
     NewGoodFragment mNewGoodFragment;
-    Fragment[] mFragments = new Fragment[1];
+    BoutiqueFragment mBoutiqueFragment;
+    Fragment[] mFragments = new Fragment[2];
     private int index;
     private int currentTabIndex;
 
@@ -37,15 +36,17 @@ public class FuliCenterMain2Activity extends BaseActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container, mNewGoodFragment)
-                //.add(R.id.fragment_container, contactListFragment)
-              //  .hide(contactListFragment)
+                .add(R.id.fragment_container, mBoutiqueFragment)
+                .hide(mBoutiqueFragment)
                 .show(mNewGoodFragment)
                 .commit();
     }
 
     private void initFragment() {
         mNewGoodFragment = new NewGoodFragment();
-
+        mBoutiqueFragment = new BoutiqueFragment();
+        mFragments[0] = mNewGoodFragment;
+        mFragments[1] = mBoutiqueFragment;
     }
 
     private void initView() {
@@ -94,8 +95,9 @@ public class FuliCenterMain2Activity extends BaseActivity {
             currentTabIndex = index;
         }
     }
-    private  void setRadioChecked(int index){
-        for (int i=0;i<mRadios.length;i++) {
+
+    private void setRadioChecked(int index) {
+        for (int i = 0; i < mRadios.length; i++) {
             if (i == index) {
                 mRadios[i].setChecked(true);
             } else {

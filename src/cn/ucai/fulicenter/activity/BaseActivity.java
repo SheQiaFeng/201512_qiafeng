@@ -16,15 +16,16 @@ package cn.ucai.fulicenter.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
-
-import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
-import cn.ucai.fulicenter.data.RequestManager;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.umeng.analytics.MobclickAgent;
+
+import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
+import cn.ucai.fulicenter.data.RequestManager;
 
 public class BaseActivity extends FragmentActivity {
 BaseActivity activity;
@@ -76,9 +77,8 @@ BaseActivity activity;
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 System.out.print(volleyError.getMessage());
+               Log.v("main", "Error:" + volleyError.getMessage());
             }
         };
     }
-
-
 }
