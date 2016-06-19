@@ -2,40 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eff2f6"
+    android:background="@color/fragment_bg"
     android:orientation="vertical" >
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-         >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/back_press"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="账号登录"
-            android:textColor="#030303"
-            android:textSize="25dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="10dp"/>
 
-    </LinearLayout>
-    <ImageView
-        android:layout_marginTop="10dp"
-        android:layout_width="500dp"
-        android:layout_height="1dp"
-        android:background="#8c8c8c"
-        />
-    </LinearLayout>
+    <include layout="@layout/common_head_title_white" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"

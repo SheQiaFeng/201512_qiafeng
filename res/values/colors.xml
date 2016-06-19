@@ -70,4 +70,6 @@
     <color name="fontgrey">#999999</color>
     <color name="main_orange">#FF6C2C</color>
     <color name="main_orange2">#973d00</color>
+    <color name="main_orange3">#fff</color>
+
 </resources>
