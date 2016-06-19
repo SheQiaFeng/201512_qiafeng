@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.fragment.CategoryFragment;
 import cn.ucai.fulicenter.fragment.NewGoodFragment;
 
 public class FuliCenterMain2Activity extends BaseActivity {
@@ -21,7 +22,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
     RadioButton[] mRadios = new RadioButton[5];
     NewGoodFragment mNewGoodFragment;
     BoutiqueFragment mBoutiqueFragment;
-    Fragment[] mFragments = new Fragment[2];
+    CategoryFragment mCategoryFragment;
+    Fragment[] mFragments = new Fragment[3];
     private int index;
     private int currentTabIndex;
 
@@ -37,6 +39,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 .beginTransaction()
                 .add(R.id.fragment_container, mNewGoodFragment)
                 .add(R.id.fragment_container, mBoutiqueFragment)
+                .add(R.id.fragment_container, mCategoryFragment)
                 .hide(mBoutiqueFragment)
                 .show(mNewGoodFragment)
                 .commit();
@@ -45,8 +48,10 @@ public class FuliCenterMain2Activity extends BaseActivity {
     private void initFragment() {
         mNewGoodFragment = new NewGoodFragment();
         mBoutiqueFragment = new BoutiqueFragment();
+        mCategoryFragment = new CategoryFragment();
         mFragments[0] = mNewGoodFragment;
         mFragments[1] = mBoutiqueFragment;
+        mFragments[2] = mCategoryFragment;
     }
 
     private void initView() {
