@@ -63,7 +63,10 @@
         <activity android:name=".activity.BoutiqueChildActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
-
+        <!--分类页面-->
+        <activity android:name=".activity.CategoryChildActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"/>
         <!-- 开屏页 -->
         <activity
             android:name=".activity.SplashActivity"
