@@ -39,6 +39,7 @@ import cn.ucai.fulicenter.data.OkHttpUtils;
 import cn.ucai.fulicenter.listener.OnSetAvatarListener;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.view.DisplayUtils;
 
 /**
  * 注册页
@@ -59,7 +60,6 @@ public class RegisterActivity extends BaseActivity {
     String pwd;
     String nick;
 
-
     ProgressDialog pd;
 
     @Override
@@ -69,32 +69,32 @@ public class RegisterActivity extends BaseActivity {
         mContext = this;
         initView();
         setListener();
-
     }
 
     private void initView() {
-        userNameEditText = (EditText) findViewById(R.id.username);
+        userNameEditText = (EditText) findViewById(R.id.etUserName);
         passwordEditText = (EditText) findViewById(R.id.password);
         confirmPwdEditText = (EditText) findViewById(R.id.confirm_password);
         userNickEditText = (EditText) findViewById(R.id.etNick);
         mIVAvatar = (ImageView) findViewById(R.id.iv_avatar);
+        DisplayUtils.initBackWithTitle(this,"用户注册");
     }
 
     private void setListener() {
         onSetRegisterListener();
         onSetAvatarListener();
-        onLoginClickListener();
+//        onLoginClickListener();
     }
-
-    private void onLoginClickListener() {
-
-        findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+//
+//    private void onLoginClickListener() {
+//
+//        findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//    }
 
     private void onSetAvatarListener() {
         findViewById(R.id.layout_user_avatar).setOnClickListener(new View.OnClickListener() {
