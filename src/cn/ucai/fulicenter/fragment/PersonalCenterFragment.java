@@ -25,6 +25,7 @@ import java.util.HashMap;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.FuliCenterMain2Activity;
+import cn.ucai.fulicenter.activity.SettingsActivity;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.UserUtils;
 
@@ -33,6 +34,7 @@ import cn.ucai.fulicenter.utils.UserUtils;
  */
 public class PersonalCenterFragment extends Fragment {
     FuliCenterMain2Activity mContext;
+    MyClickListener listener;
     //资源文件
     private int[] pic_path = {R.drawable.order_list1,
             R.drawable.order_list2,
@@ -57,10 +59,30 @@ public class PersonalCenterFragment extends Fragment {
         View layout = View.inflate(mContext, R.layout.fragment_personal_center, null);
         initView(layout);
         initData();
-        registerCollectCountChangedListener();
-        registerUpdateUserReceiver();
+        setListener();
         return layout;
     }
+
+    private void setListener() {
+        registerCollectCountChangedListener();
+        registerUpdateUserReceiver();
+        listener = new MyClickListener();
+        mtvSettings.setOnClickListener(listener);
+        mLayoutCenterUserInfo.setOnClickListener(listener);
+    }
+
+    class MyClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_center_settings:
+                case R.id.center_user_info:
+                    startActivity(new Intent(mContext, SettingsActivity.class));
+                    break;
+            }
+        }
+    }
+
 
     private void initData() {
         mCollectCount = FuLiCenterApplication.getInstance().getCollectCount();
@@ -116,7 +138,8 @@ public class PersonalCenterFragment extends Fragment {
     }
 
     CollectCountChangedReceive mReceiver;
-    private void registerCollectCountChangedListener(){
+
+    private void registerCollectCountChangedListener() {
         mReceiver = new CollectCountChangedReceive();
         IntentFilter filter = new IntentFilter("update_collect_count");
         mContext.registerReceiver(mReceiver, filter);
@@ -130,19 +153,20 @@ public class PersonalCenterFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             new DownloadCollectCountTask(mContext).execute();
-             initData();
+            initData();
         }
     }
 
     UpdateUserChangedReceiver mUserReceiver;
-    private void registerUpdateUserReceiver(){
+
+    private void registerUpdateUserReceiver() {
         mUserReceiver = new UpdateUserChangedReceiver();
         IntentFilter filter = new IntentFilter("update_user");
-        mContext.registerReceiver(mUserReceiver,filter);
+        mContext.registerReceiver(mUserReceiver, filter);
     }
 
 
-//当数量改变的时候，刷新数量
+    //当数量改变的时候，刷新数量
     @Override
     public void onDestroy() {
         super.onDestroy();

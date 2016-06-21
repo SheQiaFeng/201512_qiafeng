@@ -67,6 +67,11 @@
         <activity android:name=".activity.CategoryChildActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
+        <!--设置页-->
+        <activity android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"/>
+
         <!-- 开屏页 -->
         <activity
             android:name=".activity.SplashActivity"
