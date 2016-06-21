@@ -14,10 +14,13 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.data.ApiParams;
 import cn.ucai.fulicenter.data.GsonRequest;
 import cn.ucai.fulicenter.utils.ImageUtils;
@@ -149,4 +152,43 @@ public class GoodDetailActivity extends BaseActivity {
         settings.setBuiltInZoomControls(true);
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCollectStatus();
+    }
+
+    private void initCollectStatus() {
+        User user = FuLiCenterApplication.getInstance().getUser();
+        if (user != null) {
+            try {
+                String path = new ApiParams()
+                        .with(I.Collect.USER_NAME, user.getMUserName())
+                        .with(I.Collect.GOODS_ID,mGoodsId + "")
+                        .getRequestUrl(I.REQUEST_IS_COLLECT);
+                executeRequest(new GsonRequest<MessageBean>(path,MessageBean.class,
+                        responsIsCollectListener(),errorListener()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            mivCollect.setImageResource(R.drawable.bg_collect_in);
+        }
+    }
+
+    private Response.Listener<MessageBean> responsIsCollectListener() {
+        return new Response.Listener<MessageBean>() {
+            @Override
+            public void onResponse(MessageBean messageBean) {
+                if (messageBean.isSuccess()) {
+                    mivCollect.setImageResource(R.drawable.bg_collect_out);
+                }else {
+                    mivCollect.setImageResource(R.drawable.bg_collect_in);
+                }
+            }
+        };
+    }
+
 }

@@ -33,17 +33,18 @@ public class DownloadCollectCountTask extends BaseActivity {
             if (user != null) {
 
                 path = new ApiParams()
-                        .with(I.User.USER_NAME, user.getMUserName())
+                        .with(I.Collect.USER_NAME,FuLiCenterApplication.getInstance().getUserName())
                         .getRequestUrl(I.REQUEST_FIND_COLLECT_COUNT);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void execute() {
         if (path == null || path.isEmpty()) return;
-        executeRequest(new GsonRequest<MessageBean>(path,MessageBean.class,
-                responseDownloadCollectCountListener(),errorListener()));
+        executeRequest(new GsonRequest<MessageBean>(path, MessageBean.class,
+                responseDownloadCollectCountListener(), errorListener()));
     }
 
     private Response.Listener<MessageBean> responseDownloadCollectCountListener() {

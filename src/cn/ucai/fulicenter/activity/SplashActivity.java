@@ -18,6 +18,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.db.UserDao;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
 
 /**
@@ -73,7 +74,8 @@ public class SplashActivity extends BaseActivity {
                 Log.i("main","----------------11111111111111-------------"+user);
                 FuLiCenterApplication.currentUserNick = user.getMUserNick();
                 new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
-             }
+            new DownloadCollectCountTask(SplashActivity.this).execute();
+            }
 
         }
         new Thread(new Runnable() {
