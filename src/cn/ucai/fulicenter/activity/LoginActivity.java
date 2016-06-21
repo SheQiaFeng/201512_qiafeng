@@ -94,7 +94,7 @@ public class LoginActivity extends BaseActivity {
         mContext = this;
         usernameEditText = (EditText) findViewById(R.id.username);
         passwordEditText = (EditText) findViewById(R.id.password);
-        DisplayUtils.initBackWithTitle(this,"账号登录");
+        DisplayUtils.initBackWithTitle(this, "账号登录");
         // 如果用户名改变，清空密码
 
         if (FuLiCenterApplication.getInstance().getUserName() != null) {
@@ -278,7 +278,7 @@ public class LoginActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {      //执行下载任务
-                   // Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
                     new DownloadContactListTask(mContext, currentUsername);//下载联系人
 
                 }
@@ -307,11 +307,14 @@ public class LoginActivity extends BaseActivity {
         if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
             pd.dismiss();
         }
-        // 进入主页面
-        Intent intent = new Intent(LoginActivity.this,
-                FuliCenterMain2Activity.class);
-        startActivity(intent);
-
+        String action = getIntent().getStringExtra("action");
+        if (action != null) {
+            // 进入主页面
+            Intent intent = new Intent(LoginActivity.this,
+                    FuliCenterMain2Activity.class)
+                    .putExtra("action",action);
+            startActivity(intent);
+        }
         finish();
     }
 

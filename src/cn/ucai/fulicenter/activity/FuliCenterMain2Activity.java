@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -93,8 +94,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 break;
             case R.id.layout_personal_center:
                 if (FuLiCenterApplication.getInstance().getUser() != null) {
-                index = 4;
-                }else {
+                    index = 4;
+                } else {
                     gotoLogin();
                 }
 
@@ -114,7 +115,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
     }
 
     private void gotoLogin() {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, LoginActivity.class).putExtra("action", "personal"));
     }
 
     private void setRadioChecked(int index) {
@@ -130,6 +131,28 @@ public class FuliCenterMain2Activity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setRadioChecked(index);
+        Log.e("main", "user=" + FuLiCenterApplication.getInstance().getUser());
+        String action = getIntent().getStringExtra("action");
+        if (FuLiCenterApplication.getInstance().getUser() != null && action != null) {
+            if (action.equals("presonal")) {
+                index = 4;
+            } else {
+                setRadioChecked(index);
+            }
+            if (currentTabIndex != index) {
+                FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+                trx.hide(mFragments[currentTabIndex]);
+                if (!mFragments[index].isAdded()) {
+                    trx.add(R.id.fragment_container, mFragments[index]);
+                }
+
+                trx.show(mFragments[index]).commit();
+                setRadioChecked(index);
+                currentTabIndex = index;
+            }
+        } else {
+            setRadioChecked(index);
+        }
+
     }
 }

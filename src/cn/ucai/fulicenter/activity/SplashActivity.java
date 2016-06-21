@@ -50,10 +50,10 @@ public class SplashActivity extends BaseActivity {
             FuLiCenterApplication instance = FuLiCenterApplication.getInstance();
             instance.setUser(user);
             // 登陆成功，保存用户名密码
-            instance.setUserName(user.getMUserName());
-            instance.setPassword(user.getMUserPassword());
-            FuLiCenterApplication.currentUserNick = user.getMUserNick();
-            new DownloadContactListTask(mContext,user.getMUserName());//下载联系人
+//            instance.setUserName(user.getMUserName());
+//            instance.setPassword(user.getMUserPassword());
+//            FuLiCenterApplication.currentUserNick = user.getMUserNick();
+//            new DownloadContactListTask(mContext,user.getMUserName());//下载联系人
 
         }
 
