@@ -96,6 +96,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
             case R.id.layout_personal_center:
                 if (FuLiCenterApplication.getInstance().getUser() != null) {
                     index = 4;
+
                 } else {
                     gotoLogin();
                 }

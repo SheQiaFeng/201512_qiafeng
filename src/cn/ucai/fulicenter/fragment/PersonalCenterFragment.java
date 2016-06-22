@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,7 @@ public class PersonalCenterFragment extends Fragment {
 
     private void initData() {
         mCollectCount = FuLiCenterApplication.getInstance().getCollectCount();
+        Log.e("main", "++++++++mCollectCount:" + mCollectCount);
         mtvCollectCount.setText("" + mCollectCount);
         if (FuLiCenterApplication.getInstance().getUser() != null) {
             UserUtils.setCurrentUserAvatar(mivUserAvarar);
@@ -130,10 +132,9 @@ public class PersonalCenterFragment extends Fragment {
     }
 
     class CollectCountChangedReceive extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-
+       initData();
         }
     }
 
