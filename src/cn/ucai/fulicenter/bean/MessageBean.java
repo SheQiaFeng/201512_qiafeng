@@ -32,7 +32,7 @@ public class MessageBean implements Serializable {
 		return msg;
 	}
 	public void setMsg(String msg) {
-		this.msg = msg;
+		 this.msg = msg;
 	}
 	@Override
 	public String toString() {

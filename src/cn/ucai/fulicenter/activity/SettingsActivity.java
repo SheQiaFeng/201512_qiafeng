@@ -351,15 +351,14 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 			public void onSuccess() {
 				runOnUiThread(new Runnable() {
 					public void run() {
-
+						pd.dismiss();
 						FuLiCenterApplication instance=
 								FuLiCenterApplication.getInstance();
 						instance.getContactList().clear();
 						instance.getUserList().clear();
                         instance.setUser(null);
                         instance.setUserName(null);
-                        instance.setCollectCount(0);
-                        pd.dismiss();
+//                        instance.setCollectCount(0);
 						// 重新显示登陆页面
 						finish();
 						startActivity(new Intent(mContext, LoginActivity.class));

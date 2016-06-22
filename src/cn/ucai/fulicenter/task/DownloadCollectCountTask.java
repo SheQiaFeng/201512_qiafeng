@@ -31,10 +31,10 @@ public class DownloadCollectCountTask extends BaseActivity {
         try {
             User user = FuLiCenterApplication.getInstance().getUser();
             if (user != null) {
-
                 path = new ApiParams()
-                        .with(I.Collect.USER_NAME,FuLiCenterApplication.getInstance().getUserName())
+                        .with(I.Collect.USER_NAME, user.getMUserName())
                         .getRequestUrl(I.REQUEST_FIND_COLLECT_COUNT);
+                Log.e("main", "userName:" + user.getMUserName());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,12 +53,13 @@ public class DownloadCollectCountTask extends BaseActivity {
             public void onResponse(MessageBean messageBean) {
                 if (messageBean.isSuccess()) {
                     String count = messageBean.getMsg();
-                    Log.e("main", "count:" + count);
                     FuLiCenterApplication.getInstance().setCollectCount(Integer.parseInt(count));
-
+                    Log.e("main", "count:" + count);
+                    Log.e("main", "Msg:" + messageBean.getMsg());
                 } else {
-                    Log.e("main", "count=0");
                     FuLiCenterApplication.getInstance().setCollectCount(0);
+                    Log.e("main", "Msg:" + messageBean.getMsg());
+                    Log.e("main", "++count=false++");
                 }
                 Intent intent = new Intent("update_collect_count");
                 mContext.sendStickyBroadcast(intent);

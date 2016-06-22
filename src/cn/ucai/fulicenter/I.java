@@ -485,4 +485,7 @@ public interface I {
     String PAY_URL= FuLiCenterApplication.SERVER_ROOT+"?request="+I.REQUEST_PAY;
 
     String ACTION_TYPE_PERSONAL = "personal";
+
+    int ACTION_ADD_COLLECT = 1;
+    int ACTION_DEL_COLLECT = 2;
 }

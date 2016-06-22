@@ -1,7 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -23,6 +25,7 @@ import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.data.ApiParams;
 import cn.ucai.fulicenter.data.GsonRequest;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.ImageUtils;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.DisplayUtils;
@@ -39,8 +42,6 @@ public class GoodDetailActivity extends BaseActivity {
     int mGoodsId;
     SlideAutoLoopView mSlideAutoLoopView;
     FlowIndicator mFlowIndicator;
-
-
    /*  * 显示颜色的容器布局
      */
     LinearLayout mLayoutColors;
@@ -58,6 +59,9 @@ public class GoodDetailActivity extends BaseActivity {
      * 当前颜色值
      **/
     int mCurrentColor;
+
+    boolean isCollect;
+    int actionCollect;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -65,13 +69,87 @@ public class GoodDetailActivity extends BaseActivity {
         mContext = this;
         initView();
        initData();
+        setListener();
+
     }
 
-  private void initData() {
-        int goodId=getIntent().getIntExtra(D.NewGood.KEY_GOODS_ID,0);
+    private void setListener() {
+        setCollectClickListener();
+
+    }
+
+    private void setCollectClickListener() {
+        mivCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = FuLiCenterApplication.getInstance().getUser();
+                if (user == null) {
+                    //没有登录就跳转到登录页面
+                    startActivity(new Intent(GoodDetailActivity.this, LoginActivity.class));
+                } else {
+                    try {
+                        String path;
+                        if (isCollect) {
+                            actionCollect = I.ACTION_DEL_COLLECT;
+                            path = new ApiParams()
+                                    .with(I.Collect.USER_NAME, user.getMUserName())
+                                    .with(I.Collect.GOODS_ID,mGoodsId+ "")
+                                    .getRequestUrl(I.REQUEST_DELETE_COLLECT);
+                            Log.e("main","mGoodsId:"+mGoodsId);
+                            Log.e("main","UserName:"+user.getMUserName());
+                            Log.e("main", "取消收藏:" + path);
+                        } else {
+                            actionCollect = I.ACTION_ADD_COLLECT;
+                            path = new ApiParams()
+                                    .with(I.Collect.USER_NAME, user.getMUserName())
+                                    .with(I.Collect.GOODS_ID,mGoodsId+ "")
+                                    .with(I.Collect.GOODS_NAME, mGood.getGoodsName())
+                                    .with(I.Collect.GOODS_ENGLISH_NAME, mGood.getGoodsEnglishName())
+                                    .with(I.Collect.GOODS_THUMB, mGood.getGoodsThumb())
+                                    .with(I.Collect.GOODS_IMG, mGood.getGoodsImg())
+                                    .with(I.Collect.ADD_TIME, mGood.getAddTime() + "")
+                                    .getRequestUrl(I.REQUEST_ADD_COLLECT);
+                            Log.e("main", "增加收藏:" + path);
+                            Log.e("main", "增加收藏(mGoodsId)：" + mGoodsId);
+                        }
+                        executeRequest(new GsonRequest<MessageBean>(path,MessageBean.class,
+                                responseSetCollectListener(),errorListener()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+        });
+    }
+
+    private Response.Listener<MessageBean> responseSetCollectListener() {
+        return new Response.Listener<MessageBean>() {
+            @Override
+            public void onResponse(MessageBean messageBean) {
+                if (messageBean.isSuccess()) {
+                    if (actionCollect == I.ACTION_ADD_COLLECT) {
+                        isCollect = true;
+                        Log.e("main", "actionCollect:" + actionCollect);
+                        mivCollect.setImageResource(R.drawable.bg_collect_out);
+                    } else  if (actionCollect == I.ACTION_DEL_COLLECT) {
+                        isCollect = false;
+                        mivCollect.setImageResource(R.drawable.bg_collect_in);
+                        Log.e("main", "actionCollect:" + actionCollect);
+                    }
+                    new DownloadCollectCountTask(mContext).execute();
+                }
+                Utils.showToast(mContext,messageBean.getMsg(),Toast.LENGTH_SHORT);
+            }
+        };
+    }
+
+
+    private void initData() {
+        mGoodsId=getIntent().getIntExtra(D.NewGood.KEY_GOODS_ID,0);
         try {
             String path = new ApiParams()
-                    .with(D.NewGood.KEY_GOODS_ID, goodId + "")
+                    .with(D.NewGood.KEY_GOODS_ID, mGoodsId + "")
                     .getRequestUrl(I.REQUEST_FIND_GOOD_DETAILS);
             executeRequest(new GsonRequest<GoodDetailsBean>(path, GoodDetailsBean.class,
                     responseDownloadGoodDetailsListener(),errorListener()));
@@ -161,30 +239,38 @@ public class GoodDetailActivity extends BaseActivity {
 
     private void initCollectStatus() {
         User user = FuLiCenterApplication.getInstance().getUser();
+        //判断用户是否登录
         if (user != null) {
             try {
+                //查看用户是否被收藏
+                Log.e("main", "判断用户是否有收藏:"+user.getMUserName());
                 String path = new ApiParams()
-                        .with(I.Collect.USER_NAME, user.getMUserName())
-                        .with(I.Collect.GOODS_ID,mGoodsId + "")
+                        .with(I.Collect.USER_NAME, FuLiCenterApplication.getInstance().getUserName())
+                        .with(I.Collect.GOODS_ID,mGoodsId+ "")
                         .getRequestUrl(I.REQUEST_IS_COLLECT);
+                Log.e("main", "商品Id：" + mGoodsId);
+                Log.e("main", "收藏path:" + path);
                 executeRequest(new GsonRequest<MessageBean>(path,MessageBean.class,
                         responsIsCollectListener(),errorListener()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
+            isCollect = false;
             mivCollect.setImageResource(R.drawable.bg_collect_in);
         }
     }
-
+//设置背景颜色
     private Response.Listener<MessageBean> responsIsCollectListener() {
         return new Response.Listener<MessageBean>() {
             @Override
             public void onResponse(MessageBean messageBean) {
+                Log.e("main", "message=" + messageBean);
                 if (messageBean.isSuccess()) {
+                    isCollect = true;
                     mivCollect.setImageResource(R.drawable.bg_collect_out);
                 }else {
+                    isCollect = false;
                     mivCollect.setImageResource(R.drawable.bg_collect_in);
                 }
             }

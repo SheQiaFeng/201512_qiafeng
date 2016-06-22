@@ -27,7 +27,7 @@ import cn.ucai.fulicenter.data.RequestManager;
 
 public class FuLiCenterApplication extends Application {
 
-	public static   String SERVER_ROOT="http://192.168.1.6:8080/FuLiCenterServer/Server";
+	public static   String SERVER_ROOT="http://192.168.1.4:8080/FuLiCenterServer/Server";
 	//public static   String SERVER_ROOT="http://191.168.1.2:8080/FuLiCenterServer/Server";
 
 	public static Context applicationContext;
@@ -99,6 +99,7 @@ public class FuLiCenterApplication extends Application {
 	 */
 	public void setUserName(String username) {
 	    hxSDKHelper.setHXId(username);
+
 	}
 
 	/**
