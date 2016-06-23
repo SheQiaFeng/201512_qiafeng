@@ -100,16 +100,18 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 index = 2;
                 break;
             case R.id.layout_cart:
-                index = 3;
+                if (FuLiCenterApplication.getInstance().getUser() != null) {
+                    index = 3;
+                } else {
+                    gotoLogin(I.ACTION_TYPE_CART);
+                }
                 break;
             case R.id.layout_personal_center:
                 if (FuLiCenterApplication.getInstance().getUser() != null) {
                     index = 4;
-
                 } else {
-                    gotoLogin();
+                    gotoLogin(I.ACTION_TYPE_PERSONAL);
                 }
-
                 break;
         }
         if (currentTabIndex != index) {
@@ -125,8 +127,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
         }
     }
 
-    private void gotoLogin() {
-        startActivity(new Intent(this, LoginActivity.class).putExtra("action", I.ACTION_TYPE_PERSONAL));
+    private void gotoLogin(String action) {
+        startActivity(new Intent(this, LoginActivity.class).putExtra("action", action));
     }
 
     private void setRadioChecked(int index) {
@@ -155,28 +157,29 @@ public class FuliCenterMain2Activity extends BaseActivity {
         if (FuLiCenterApplication.getInstance().getUser() != null && action != null) {
             if (action.equals(I.ACTION_TYPE_PERSONAL)) {
                 index = 4;
-            } else {
-                setRadioChecked(index);
             }
-            if (currentTabIndex == 4 && FuLiCenterApplication.getInstance().getUser() ==null) {
-                index = 0;
-            }
-            if (currentTabIndex != index) {
-                FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
-                trx.hide(mFragments[currentTabIndex]);
-                if (!mFragments[index].isAdded()) {
-                    trx.add(R.id.fragment_container, mFragments[index]);
-                }
-
-                trx.show(mFragments[index]).commit();
-                setRadioChecked(index);
-                currentTabIndex = index;
+            if (action.equals(I.ACTION_TYPE_CART)) {
+                index = 3;
             }
         } else {
             setRadioChecked(index);
         }
+        if (currentTabIndex == 4 && FuLiCenterApplication.getInstance().getUser() == null) {
+            index = 0;
+        }
+        if (currentTabIndex != index) {
+            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+            trx.hide(mFragments[currentTabIndex]);
+            if (!mFragments[index].isAdded()) {
+                trx.add(R.id.fragment_container, mFragments[index]);
+            }
 
+            trx.show(mFragments[index]).commit();
+            setRadioChecked(index);
+            currentTabIndex = index;
+        }
     }
+
 
     class UpdateCartReceiver extends BroadcastReceiver {
 
@@ -184,8 +187,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             int count = Utils.sumCartCount();
             if (count > 0) {
-            mTvCartHint.setVisibility(View.VISIBLE);
-                mTvCartHint.setText(""+count);
+                mTvCartHint.setVisibility(View.VISIBLE);
+                mTvCartHint.setText("" + count);
             } else {
                 mTvCartHint.setVisibility(View.GONE);
 
@@ -197,7 +200,8 @@ public class FuliCenterMain2Activity extends BaseActivity {
     }
 
     UpdateCartReceiver mReceiver;
-    private void registerCarReceiver(){
+
+    private void registerCarReceiver() {
         mReceiver = new UpdateCartReceiver();
         IntentFilter filter = new IntentFilter("update_cart_list");
         filter.addAction("update_user");

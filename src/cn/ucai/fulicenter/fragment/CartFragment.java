@@ -21,6 +21,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.FuliCenterMain2Activity;
 import cn.ucai.fulicenter.adapter.CartAdapter;
 import cn.ucai.fulicenter.bean.CartBean;
+import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.data.ApiParams;
 import cn.ucai.fulicenter.data.GsonRequest;
 import cn.ucai.fulicenter.utils.Utils;
@@ -41,6 +42,8 @@ public class CartFragment extends Fragment {
     TextView mtvHint;
     LinearLayoutManager mLinearLayoutManager;
     TextView mtvNothing;
+    TextView mtvRankPrice;
+    TextView mtvSavePrice;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = (FuliCenterMain2Activity) getActivity();
@@ -115,6 +118,12 @@ public class CartFragment extends Fragment {
             ArrayList<CartBean> cartList = FuLiCenterApplication.getInstance().getCartList();
             mCartList.clear();
             mCartList.addAll(cartList);
+            sumPrice();
+            if (mCartList == null || mCartList.size() == 0) {
+                mtvNothing.setVisibility(View.VISIBLE);
+            } else {
+                mtvNothing.setVisibility(View.GONE);
+            }
 //            mContext.executeRequest(new GsonRequest<CartBean[]>(path,
 //                    CartBean[].class, responseDownloadCartListener(),
 //                    mContext.errorListener()));
@@ -179,6 +188,29 @@ public class CartFragment extends Fragment {
         mRecyrlerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new CartAdapter(mContext, mCartList);
         mRecyrlerView.setAdapter(mAdapter);
+        mtvRankPrice = (TextView) layout.findViewById(R.id.tvSumprice);
+        mtvSavePrice = (TextView) layout.findViewById(R.id.tvSavePrice);
+    }
+    public void sumPrice() {
+        int sumPrice = 0;
+        int crrentPrice = 0;
+        if (mCartList != null && mCartList.size() > 0) {
+            for (CartBean cart : mCartList) {
+                GoodDetailsBean goods = cart.getGoods();
+                if (goods != null&&cart.isChecked()) {
+                    sumPrice +=convertPrice( goods.getCurrencyPrice() )* cart.getCount();
+                    crrentPrice += convertPrice(goods.getRankPrice()) * cart.getCount();
+                }
+            }
+        }
+        int savePrice = sumPrice - crrentPrice;
+        mtvRankPrice.setText("合计：￥" + sumPrice);
+        mtvSavePrice.setText("节省：￥"+savePrice);
+    }
+    private int convertPrice(String price) {
+        price = price.substring(price.indexOf("￥") + 1);
+        int p1 = Integer.parseInt(price);
+        return p1;
     }
 }
 
