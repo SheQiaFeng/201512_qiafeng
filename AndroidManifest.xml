@@ -71,7 +71,10 @@
         <activity android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
-
+        <!--收藏界面-->
+        <activity android:name=".activity.CollectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"/>
         <!-- 开屏页 -->
         <activity
             android:name=".activity.SplashActivity"
