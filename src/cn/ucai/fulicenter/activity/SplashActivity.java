@@ -14,10 +14,12 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.db.UserDao;
+import cn.ucai.fulicenter.task.DownloadCartListTask;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
 
@@ -62,19 +64,17 @@ public class SplashActivity extends BaseActivity {
 
 
         if (DemoHXSDKHelper.getInstance().isLogined()) {
-           // Log.i("main","-----------------------------");
             String username = FuLiCenterApplication.getInstance().getUserName();
             UserDao dao = new UserDao(SplashActivity.this);
             User user=dao.findUserByUserName(username);
             FuLiCenterApplication.getInstance().setUser(user);
-           // Toast.makeText(this,"到这",Toast.LENGTH_SHORT).show();
-           // Log.i("main","----------------11111111111111-------------");
             //登录成功
             if(user!=null){
                 Log.i("main","----------------11111111111111-------------"+user);
                 FuLiCenterApplication.currentUserNick = user.getMUserNick();
                 new DownloadContactListTask(SplashActivity.this, user.getMUserName()).execute();
             new DownloadCollectCountTask(SplashActivity.this).execute();
+                new DownloadCartListTask(mContext, username, 0, I.PAGE_SIZE_DEFAULT).execute();
             }
 
         }

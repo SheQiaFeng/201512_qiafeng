@@ -57,6 +57,8 @@ import cn.ucai.fulicenter.db.EMUserDao;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.EMUser;
 import cn.ucai.fulicenter.listener.OnSetAvatarListener;
+import cn.ucai.fulicenter.task.DownloadCartListTask;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.MD5;
@@ -279,7 +281,10 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void run() {      //执行下载任务
                     // Toast.makeText(mContext, "---------+++++"+currentUsername, Toast.LENGTH_SHORT).show();
+
                     new DownloadContactListTask(mContext, currentUsername);//下载联系人
+                    new DownloadCollectCountTask(mContext).execute();
+                    new DownloadCartListTask(mContext, currentUsername, 0, I.PAGE_SIZE_DEFAULT).execute();
 
                 }
             });
@@ -309,12 +314,12 @@ public class LoginActivity extends BaseActivity {
         }
         String action = getIntent().getStringExtra("action");
         if (action != null) {
-          sendStickyBroadcast(new Intent("update_user "));
+            sendStickyBroadcast(new Intent("update_user "));
 
             // 进入主页面
             Intent intent = new Intent(LoginActivity.this,
                     FuliCenterMain2Activity.class)
-                    .putExtra("action",action);
+                    .putExtra("action", action);
             startActivity(intent);
         }
         finish();

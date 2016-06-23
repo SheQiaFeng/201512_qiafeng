@@ -1,6 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +19,7 @@ import cn.ucai.fulicenter.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.fragment.CategoryFragment;
 import cn.ucai.fulicenter.fragment.NewGoodFragment;
 import cn.ucai.fulicenter.fragment.PersonalCenterFragment;
+import cn.ucai.fulicenter.utils.Utils;
 
 public class FuliCenterMain2Activity extends BaseActivity {
 
@@ -50,6 +54,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 .add(R.id.fragment_container, mPersonalCenterFragment).hide(mPersonalCenterFragment)
                 .show(mNewGoodFragment)
                 .commit();
+        registerCarReceiver();
     }
 
     private void initFragment() {
@@ -76,7 +81,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
         mRadios[2] = mRadioCategory;
         mRadios[3] = mRadioCart;
         mRadios[4] = mRadioPersonalCenter;
-
+        mTvCartHint.setVisibility(View.GONE);
     }
 
     public void onCheckedChange(View view) {
@@ -167,5 +172,37 @@ public class FuliCenterMain2Activity extends BaseActivity {
             setRadioChecked(index);
         }
 
+    }
+
+    class UpdateCartReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count = Utils.sumCartCount();
+            if (count > 0) {
+            mTvCartHint.setVisibility(View.VISIBLE);
+                mTvCartHint.setText(""+count);
+            } else {
+                mTvCartHint.setVisibility(View.GONE);
+
+            }
+            if (FuLiCenterApplication.getInstance().getUser() == null) {
+                mTvCartHint.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    UpdateCartReceiver mReceiver;
+    private void registerCarReceiver(){
+        mReceiver = new UpdateCartReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        filter.addAction("update_user");
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
     }
 }
