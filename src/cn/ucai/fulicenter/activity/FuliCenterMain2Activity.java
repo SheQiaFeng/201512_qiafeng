@@ -16,6 +16,7 @@ import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.fragment.CartFragment;
 import cn.ucai.fulicenter.fragment.CategoryFragment;
 import cn.ucai.fulicenter.fragment.NewGoodFragment;
 import cn.ucai.fulicenter.fragment.PersonalCenterFragment;
@@ -34,6 +35,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
     PersonalCenterFragment mPersonalCenterFragment;
+    CartFragment mCartFragment;
     Fragment[] mFragments = new Fragment[5];
     private int index;
     private int currentTabIndex;
@@ -61,10 +63,12 @@ public class FuliCenterMain2Activity extends BaseActivity {
         mNewGoodFragment = new NewGoodFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
+        mCartFragment = new CartFragment();
         mPersonalCenterFragment = new PersonalCenterFragment();
         mFragments[0] = mNewGoodFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
+        mFragments[3] = mCartFragment;
         mFragments[4] = mPersonalCenterFragment;
     }
 
