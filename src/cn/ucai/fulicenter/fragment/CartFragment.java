@@ -1,5 +1,9 @@
 package cn.ucai.fulicenter.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,6 +61,7 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setPullDownRefreshListener();
         setPullUpRefreshListener();
+        registerUpdateCartListener();
     }
 
     //上拉加载
@@ -118,6 +123,7 @@ public class CartFragment extends Fragment {
             ArrayList<CartBean> cartList = FuLiCenterApplication.getInstance().getCartList();
             mCartList.clear();
             mCartList.addAll(cartList);
+            mAdapter.notifyDataSetChanged();
             sumPrice();
             if (mCartList == null || mCartList.size() == 0) {
                 mtvNothing.setVisibility(View.VISIBLE);
@@ -211,6 +217,31 @@ public class CartFragment extends Fragment {
         price = price.substring(price.indexOf("￥") + 1);
         int p1 = Integer.parseInt(price);
         return p1;
+    }
+
+    class UpdateCartReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+
+        }
+    }
+        UpdateCartReceiver mReceiver;
+        private  void registerUpdateCartListener(){
+            mReceiver = new UpdateCartReceiver();
+            IntentFilter filter = new IntentFilter("update_cart");
+            mContext.registerReceiver(mReceiver,filter);
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            mContext.unregisterReceiver(mReceiver);
+        }
     }
 }
 

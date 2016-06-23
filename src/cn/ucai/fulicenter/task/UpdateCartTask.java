@@ -82,7 +82,7 @@ public class UpdateCartTask extends BaseActivity {
                         mCart.setId(Integer.parseInt(messageBean.getMsg()));
                         cartList.add(mCart);
                     }
-                    sendStickyBroadcast(new Intent("update_cart"));
+                  mContext.sendStickyBroadcast(new Intent("update_cart"));
                 }
             }
         };

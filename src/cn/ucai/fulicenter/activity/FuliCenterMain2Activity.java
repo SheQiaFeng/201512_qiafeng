@@ -191,7 +191,6 @@ public class FuliCenterMain2Activity extends BaseActivity {
                 mTvCartHint.setText("" + count);
             } else {
                 mTvCartHint.setVisibility(View.GONE);
-
             }
             if (FuLiCenterApplication.getInstance().getUser() == null) {
                 mTvCartHint.setVisibility(View.GONE);
@@ -205,6 +204,7 @@ public class FuliCenterMain2Activity extends BaseActivity {
         mReceiver = new UpdateCartReceiver();
         IntentFilter filter = new IntentFilter("update_cart_list");
         filter.addAction("update_user");
+        filter.addAction("update_cart");
         registerReceiver(mReceiver, filter);
     }
 

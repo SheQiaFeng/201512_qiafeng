@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +18,9 @@ import java.util.ArrayList;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
+import cn.ucai.fulicenter.task.UpdateCartTask;
 import cn.ucai.fulicenter.utils.ImageUtils;
+import cn.ucai.fulicenter.utils.Utils;
 
 /**
  * Created by Administrator on 2016/6/15.
@@ -63,7 +66,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         cartViewHolder.tvPrice.setText(goods.getRankPrice());
         ImageUtils.setNewGoodThumb(goods.getGoodsThumb(), cartViewHolder.iv);
+        AddDelCartClickListener listener = new AddDelCartClickListener(goods);
+        cartViewHolder.mivAdd.setOnClickListener(listener);
+        cartViewHolder.mivReduce.setOnClickListener(listener);
 
+        cartViewHolder.mChkCart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cart.setChecked(isChecked);
+                new UpdateCartTask(mContext,cart).execute();
+            }
+        });
 
     }
 
@@ -110,6 +123,24 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mChkCart = (CheckBox) itemView.findViewById(R.id.chkSelect);
             mivAdd = (ImageView) itemView.findViewById(R.id.ivAddCart);
             mivReduce = (ImageView) itemView.findViewById(R.id.ivReduceCart);
+        }
+    }
+
+    class AddDelCartClickListener implements View.OnClickListener {
+        GoodDetailsBean good ;
+        public AddDelCartClickListener(GoodDetailsBean good) {
+            this.good = good;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ivAddCart:
+                    Utils.addCart(mContext,good);
+                    break;
+                case R.id.ivReduceCart:
+                    Utils.delCart(mContext, good);
+                    break;
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -70,12 +72,20 @@ public class GoodDetailActivity extends BaseActivity {
         initView();
        initData();
         setListener();
-
     }
-
     private void setListener() {
         setCollectClickListener();
+        setCartClickListener();
+        RegisterUpdateCartListener();
+    }
 
+    private void setCartClickListener() {
+        mivAddCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Utils.addCart(mContext,mGood);
+            }
+        });
     }
 
     private void setCollectClickListener() {
@@ -122,7 +132,6 @@ public class GoodDetailActivity extends BaseActivity {
             }
         });
     }
-
     private Response.Listener<MessageBean> responseSetCollectListener() {
         return new Response.Listener<MessageBean>() {
             @Override
@@ -143,8 +152,6 @@ public class GoodDetailActivity extends BaseActivity {
             }
         };
     }
-
-
     private void initData() {
         mGoodsId=getIntent().getIntExtra(D.NewGood.KEY_GOODS_ID,0);
         try {
@@ -157,7 +164,6 @@ public class GoodDetailActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-
    private Response.Listener<GoodDetailsBean> responseDownloadGoodDetailsListener() {
         return new Response.Listener<GoodDetailsBean>() {
             @Override
@@ -178,7 +184,6 @@ public class GoodDetailActivity extends BaseActivity {
            }
         };
    }
-
     private void initColorBanner() {
         updateColor(0);
         for (int i=0;i<mGood.getProperties().length;i++) {
@@ -200,7 +205,6 @@ public class GoodDetailActivity extends BaseActivity {
             });
         }
     }
-
     private void updateColor(int i) {
         AlbumBean[] albums = mGood.getProperties()[i].getAlbums();
         String[] albumImgUrl = new String[albums.length];
@@ -210,8 +214,6 @@ public class GoodDetailActivity extends BaseActivity {
         }
        mSlideAutoLoopView.startPlayLoop(mFlowIndicator,albumImgUrl,albumImgUrl.length);
     }
-
-
     private void initView() {
         mivCollect = (ImageView) findViewById(R.id.ivCollect);
         mivAddCart = (ImageView) findViewById(R.id.ivAddCart);
@@ -230,11 +232,22 @@ public class GoodDetailActivity extends BaseActivity {
         settings.setBuiltInZoomControls(true);
 
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         initCollectStatus();
+        initCartStatus();
+    }
+
+    private void initCartStatus() {
+        int count = Utils.sumCartCount();
+        if (count > 0) {
+            mtvCartCount.setVisibility(View.VISIBLE);
+            mtvCartCount.setText("" + count);
+        } else {
+            mtvCartCount.setVisibility(View.GONE);
+            mtvCartCount.setText("0");
+        }
     }
 
     private void initCollectStatus() {
@@ -277,4 +290,27 @@ public class GoodDetailActivity extends BaseActivity {
         };
     }
 
+    class UpdateCartReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initCartStatus();
+        }
+    }
+
+    UpdateCartReceiver mReceiver;
+    private void RegisterUpdateCartListener() {
+        mReceiver = new UpdateCartReceiver();
+        IntentFilter filter = new IntentFilter("update_cart");
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
+    }
 }
+
+
